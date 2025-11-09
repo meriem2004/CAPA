@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+  xmlns:modeler="http://camunda.org/schema/modeler/1.0"
+  id="Defs_CAPA_ISO" 
+  targetNamespace="http://example.com/capa" 
+  exporter="Camunda Modeler" 
+  exporterVersion="5.39.0"
+  modeler:executionPlatform="Camunda Cloud"
+  modeler:executionPlatformVersion="8.4.0">
+  
+  <bpmn:process id="Process_CAPA_ISO" name="Processus CAPA ISO 9001:2015" isExecutable="true">
+    
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Op" name="Déclarant / Opérationnel">
+        <bpmn:flowNodeRef>Start_Event</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Qualify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_InitEval</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Severity</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CloseMinor</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Minor</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_OpenCAPA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ImmediateCorrection</bpmn:flowNodeRef>
+      </bpmn:lane>
+      
+      <bpmn:lane id="Lane_QSE" name="Qualité (QHSE)">
+        <bpmn:flowNodeRef>Task_RootCauseAnalysis</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Boundary_SLAAnalyse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_NotifyAnalyse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Plan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RiskAssessActions</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Execute</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Boundary_ExecDeadline</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AlertAction</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Track</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_MergeTrack</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CheckEffectiveness</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Effective</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_UpdateProcedures</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Training</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Train</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_MergeTraining</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ReviewClose</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Archive</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Success</bpmn:flowNodeRef>
+      </bpmn:lane>
+      
+      <bpmn:lane id="Lane_Mgmt" name="Direction / Manager">
+        <bpmn:flowNodeRef>Task_Allocate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ValidatePlan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_PlanOK</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Reject</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_RejectCount</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Escalate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_MergePlan</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- START EVENT -->
+    <bpmn:startEvent id="Start_Event" name="Détection NC / Identification risque">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER TASKS avec formulaires inline -->
+    <bpmn:userTask id="Task_Qualify" name="Qualifier l'événement">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_qualify" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_InitEval" name="Évaluation initiale (gravité/fréquence)">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_evaluation" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gw_Severity" name="Nécessite CAPA ?">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+      <bpmn:outgoing>F6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_CloseMinor" name="Traiter comme NC simple">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_close_minor" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:endEvent id="End_Minor" name="Fin (NC simple)">
+      <bpmn:incoming>F5</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:userTask id="Task_OpenCAPA" name="Ouvrir fiche CAPA">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_open_capa" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F6</bpmn:incoming>
+      <bpmn:outgoing>F6b</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_ImmediateCorrection" name="Correction immédiate">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_correction" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F6b</bpmn:incoming>
+      <bpmn:outgoing>F6c</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_RootCauseAnalysis" name="Analyse causes racines">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_root_cause" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F6c</bpmn:incoming>
+      <bpmn:incoming>FB1_back</bpmn:incoming>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:boundaryEvent id="Boundary_SLAAnalyse" name="SLA 5j" cancelActivity="false" attachedToRef="Task_RootCauseAnalysis">
+      <bpmn:outgoing>FB1</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT120H</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+
+    <bpmn:serviceTask id="Task_NotifyAnalyse" name="Notifier retard">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="notify-sla-breach" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>FB1</bpmn:incoming>
+      <bpmn:outgoing>FB1_back</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:userTask id="Task_Plan" name="Élaborer plan d'actions">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_action_plan" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F8</bpmn:incoming>
+      <bpmn:incoming>F_MergePlan</bpmn:incoming>
+      <bpmn:incoming>F18</bpmn:incoming>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_RiskAssessActions" name="Évaluer risques">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_risk_assessment" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F10</bpmn:incoming>
+      <bpmn:outgoing>F10b</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_Allocate" name="Allouer ressources">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_allocate" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F10b</bpmn:incoming>
+      <bpmn:outgoing>F10c</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_ValidatePlan" name="Valider plan">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_validate" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F10c</bpmn:incoming>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gw_PlanOK" name="Approuvé ?">
+      <bpmn:incoming>F11</bpmn:incoming>
+      <bpmn:outgoing>F11b</bpmn:outgoing>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_Reject" name="Rejeter">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_reject" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F11b</bpmn:incoming>
+      <bpmn:outgoing>F11c_in</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gw_RejectCount" name="Rejet > 2 ?">
+      <bpmn:incoming>F11c_in</bpmn:incoming>
+      <bpmn:outgoing>F11c</bpmn:outgoing>
+      <bpmn:outgoing>F11d</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_Escalate" name="Escalader">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_escalate" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F11d</bpmn:incoming>
+      <bpmn:outgoing>F11e</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- Gateway pour merger les flux vers Task_Plan -->
+    <bpmn:exclusiveGateway id="Gateway_MergePlan">
+      <bpmn:incoming>F11c</bpmn:incoming>
+      <bpmn:incoming>F11e</bpmn:incoming>
+      <bpmn:outgoing>F_MergePlan</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_Execute" name="Exécuter actions">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_execute" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F13</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:boundaryEvent id="Boundary_ExecDeadline" name="Échéance" cancelActivity="false" attachedToRef="Task_Execute">
+      <bpmn:outgoing>FB2</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P7D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+
+    <bpmn:serviceTask id="Task_AlertAction" name="Alerter">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="alert-deadline" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>FB2</bpmn:incoming>
+      <bpmn:outgoing>FB2b</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Gateway pour merger les flux vers Task_Track -->
+    <bpmn:exclusiveGateway id="Gateway_MergeTrack">
+      <bpmn:incoming>F15</bpmn:incoming>
+      <bpmn:incoming>FB2b</bpmn:incoming>
+      <bpmn:outgoing>F_MergeTrack</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_Track" name="Suivre avancement">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_track" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F_MergeTrack</bpmn:incoming>
+      <bpmn:outgoing>F16</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_CheckEffectiveness" name="Vérifier efficacité">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_effectiveness" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F16</bpmn:incoming>
+      <bpmn:outgoing>F17</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gw_Effective" name="Efficace ?">
+      <bpmn:incoming>F17</bpmn:incoming>
+      <bpmn:outgoing>F18</bpmn:outgoing>
+      <bpmn:outgoing>F19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_UpdateProcedures" name="MAJ procédures">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_update_procedures" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F19</bpmn:incoming>
+      <bpmn:outgoing>F20</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:exclusiveGateway id="Gw_Training" name="Formation ?">
+      <bpmn:incoming>F20</bpmn:incoming>
+      <bpmn:outgoing>F21</bpmn:outgoing>
+      <bpmn:outgoing>F23</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_Train" name="Former">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_train" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F21</bpmn:incoming>
+      <bpmn:outgoing>F22</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- Gateway pour merger les flux vers Task_ReviewClose -->
+    <bpmn:exclusiveGateway id="Gateway_MergeTraining">
+      <bpmn:incoming>F22</bpmn:incoming>
+      <bpmn:incoming>F23</bpmn:incoming>
+      <bpmn:outgoing>F_MergeTraining</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:userTask id="Task_ReviewClose" name="Revue finale">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_review" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F_MergeTraining</bpmn:incoming>
+      <bpmn:outgoing>F24</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_Archive" name="Archiver">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:form_archive" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>F24</bpmn:incoming>
+      <bpmn:outgoing>F25</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:endEvent id="End_Success" name="CAPA clôturée">
+      <bpmn:incoming>F25</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- SEQUENCE FLOWS -->
+    <bpmn:sequenceFlow id="F1" sourceRef="Start_Event" targetRef="Task_Qualify" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Task_Qualify" targetRef="Task_InitEval" />
+    <bpmn:sequenceFlow id="F3" sourceRef="Task_InitEval" targetRef="Gw_Severity" />
+    
+    <bpmn:sequenceFlow id="F4" name="Non" sourceRef="Gw_Severity" targetRef="Task_CloseMinor">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=necessiteCapa = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F5" sourceRef="Task_CloseMinor" targetRef="End_Minor" />
+    
+    <bpmn:sequenceFlow id="F6" name="Oui" sourceRef="Gw_Severity" targetRef="Task_OpenCAPA">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=necessiteCapa = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F6b" sourceRef="Task_OpenCAPA" targetRef="Task_ImmediateCorrection" />
+    <bpmn:sequenceFlow id="F6c" sourceRef="Task_ImmediateCorrection" targetRef="Task_RootCauseAnalysis" />
+    
+    <bpmn:sequenceFlow id="FB1" sourceRef="Boundary_SLAAnalyse" targetRef="Task_NotifyAnalyse" />
+    <bpmn:sequenceFlow id="FB1_back" sourceRef="Task_NotifyAnalyse" targetRef="Task_RootCauseAnalysis" />
+    
+    <bpmn:sequenceFlow id="F8" sourceRef="Task_RootCauseAnalysis" targetRef="Task_Plan" />
+    <bpmn:sequenceFlow id="F10" sourceRef="Task_Plan" targetRef="Task_RiskAssessActions" />
+    <bpmn:sequenceFlow id="F10b" sourceRef="Task_RiskAssessActions" targetRef="Task_Allocate" />
+    <bpmn:sequenceFlow id="F10c" sourceRef="Task_Allocate" targetRef="Task_ValidatePlan" />
+    <bpmn:sequenceFlow id="F11" sourceRef="Task_ValidatePlan" targetRef="Gw_PlanOK" />
+    
+    <bpmn:sequenceFlow id="F11b" name="Non" sourceRef="Gw_PlanOK" targetRef="Task_Reject">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=planApprouve = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F11c_in" sourceRef="Task_Reject" targetRef="Gw_RejectCount" />
+    
+    <bpmn:sequenceFlow id="F11c" name="Non" sourceRef="Gw_RejectCount" targetRef="Gateway_MergePlan">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rejectCount &lt; 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F11d" name="Oui" sourceRef="Gw_RejectCount" targetRef="Task_Escalate">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rejectCount >= 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F11e" sourceRef="Task_Escalate" targetRef="Gateway_MergePlan" />
+    <bpmn:sequenceFlow id="F_MergePlan" sourceRef="Gateway_MergePlan" targetRef="Task_Plan" />
+    
+    <bpmn:sequenceFlow id="F13" name="Oui" sourceRef="Gw_PlanOK" targetRef="Task_Execute">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=planApprouve = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="FB2" sourceRef="Boundary_ExecDeadline" targetRef="Task_AlertAction" />
+    <bpmn:sequenceFlow id="FB2b" sourceRef="Task_AlertAction" targetRef="Gateway_MergeTrack" />
+    
+    <bpmn:sequenceFlow id="F15" sourceRef="Task_Execute" targetRef="Gateway_MergeTrack" />
+    <bpmn:sequenceFlow id="F_MergeTrack" sourceRef="Gateway_MergeTrack" targetRef="Task_Track" />
+    <bpmn:sequenceFlow id="F16" sourceRef="Task_Track" targetRef="Task_CheckEffectiveness" />
+    <bpmn:sequenceFlow id="F17" sourceRef="Task_CheckEffectiveness" targetRef="Gw_Effective" />
+    
+    <bpmn:sequenceFlow id="F18" name="Non" sourceRef="Gw_Effective" targetRef="Task_Plan">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=efficace = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F19" name="Oui" sourceRef="Gw_Effective" targetRef="Task_UpdateProcedures">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=efficace = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="F20" sourceRef="Task_UpdateProcedures" targetRef="Gw_Training" />
+    
+    <bpmn:sequenceFlow id="F21" name="Oui" sourceRef="Gw_Training" targetRef="Task_Train">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=besoinFormation = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F22" sourceRef="Task_Train" targetRef="Gateway_MergeTraining" />
+    <bpmn:sequenceFlow id="F23" name="Non" sourceRef="Gw_Training" targetRef="Gateway_MergeTraining">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=besoinFormation = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F_MergeTraining" sourceRef="Gateway_MergeTraining" targetRef="Task_ReviewClose" />
+    
+    <bpmn:sequenceFlow id="F24" sourceRef="Task_ReviewClose" targetRef="Task_Archive" />
+    <bpmn:sequenceFlow id="F25" sourceRef="Task_Archive" targetRef="End_Success" />
+    
+  </bpmn:process>
+
+  <!-- Diagramme visuel simplifié -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_CAPA_ISO">
+      
+      <bpmndi:BPMNShape id="Lane_Op_di" bpmnElement="Lane_Op" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="3600" height="200" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Lane_QSE_di" bpmnElement="Lane_QSE" isHorizontal="true">
+        <dc:Bounds x="160" y="280" width="3600" height="300" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Lane_Mgmt_di" bpmnElement="Lane_Mgmt" isHorizontal="true">
+        <dc:Bounds x="160" y="580" width="3600" height="200" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Start_Event_di" bpmnElement="Start_Event">
+        <dc:Bounds x="232" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Qualify_di" bpmnElement="Task_Qualify">
+        <dc:Bounds x="320" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_InitEval_di" bpmnElement="Task_InitEval">
+        <dc:Bounds x="470" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gw_Severity_di" bpmnElement="Gw_Severity" isMarkerVisible="true">
+        <dc:Bounds x="620" y="145" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_CloseMinor_di" bpmnElement="Task_CloseMinor">
+        <dc:Bounds x="720" y="90" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="End_Minor_di" bpmnElement="End_Minor">
+        <dc:Bounds x="862" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_OpenCAPA_di" bpmnElement="Task_OpenCAPA">
+        <dc:Bounds x="720" y="190" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_ImmediateCorrection_di" bpmnElement="Task_ImmediateCorrection">
+        <dc:Bounds x="860" y="190" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_RootCauseAnalysis_di" bpmnElement="Task_RootCauseAnalysis">
+        <dc:Bounds x="1010" y="320" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Boundary_SLAAnalyse_di" bpmnElement="Boundary_SLAAnalyse">
+        <dc:Bounds x="1062" y="382" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_NotifyAnalyse_di" bpmnElement="Task_NotifyAnalyse">
+        <dc:Bounds x="1030" y="460" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Plan_di" bpmnElement="Task_Plan">
+        <dc:Bounds x="1200" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gateway_MergePlan_di" bpmnElement="Gateway_MergePlan" isMarkerVisible="true">
+        <dc:Bounds x="1225" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_RiskAssessActions_di" bpmnElement="Task_RiskAssessActions">
+        <dc:Bounds x="1350" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Allocate_di" bpmnElement="Task_Allocate">
+        <dc:Bounds x="1350" y="630" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_ValidatePlan_di" bpmnElement="Task_ValidatePlan">
+        <dc:Bounds x="1500" y="630" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gw_PlanOK_di" bpmnElement="Gw_PlanOK" isMarkerVisible="true">
+        <dc:Bounds x="1645" y="635" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Reject_di" bpmnElement="Task_Reject">
+        <dc:Bounds x="1740" y="710" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gw_RejectCount_di" bpmnElement="Gw_RejectCount" isMarkerVisible="true">
+        <dc:Bounds x="1885" y="715" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Escalate_di" bpmnElement="Task_Escalate">
+        <dc:Bounds x="1980" y="710" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Execute_di" bpmnElement="Task_Execute">
+        <dc:Bounds x="1800" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Boundary_ExecDeadline_di" bpmnElement="Boundary_ExecDeadline">
+        <dc:Bounds x="1832" y="462" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_AlertAction_di" bpmnElement="Task_AlertAction">
+        <dc:Bounds x="1800" y="520" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gateway_MergeTrack_di" bpmnElement="Gateway_MergeTrack" isMarkerVisible="true">
+        <dc:Bounds x="1965" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Track_di" bpmnElement="Task_Track">
+        <dc:Bounds x="2060" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_CheckEffectiveness_di" bpmnElement="Task_CheckEffectiveness">
+        <dc:Bounds x="2210" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gw_Effective_di" bpmnElement="Gw_Effective" isMarkerVisible="true">
+        <dc:Bounds x="2355" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_UpdateProcedures_di" bpmnElement="Task_UpdateProcedures">
+        <dc:Bounds x="2450" y="340" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gw_Training_di" bpmnElement="Gw_Training" isMarkerVisible="true">
+        <dc:Bounds x="2595" y="345" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Train_di" bpmnElement="Task_Train">
+        <dc:Bounds x="2690" y="300" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gateway_MergeTraining_di" bpmnElement="Gateway_MergeTraining" isMarkerVisible="true">
+        <dc:Bounds x="2835" y="345" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_ReviewClose_di" bpmnElement="Task_ReviewClose">
+        <dc:Bounds x="2930" y="340" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Archive_di" bpmnElement="Task_Archive">
+        <dc:Bounds x="3080" y="340" width="100" height="60" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="End_Success_di" bpmnElement="End_Success">
+        <dc:Bounds x="3232" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Edges simplifiées -->
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="268" y="170" />
+        <di:waypoint x="320" y="170" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="420" y="170" />
+        <di:waypoint x="470" y="170" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="570" y="170" />
+        <di:waypoint x="620" y="170" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="645" y="145" />
+        <di:waypoint x="645" y="120" />
+        <di:waypoint x="720" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="820" y="120" />
+        <di:waypoint x="862" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="645" y="195" />
+        <di:waypoint x="645" y="220" />
+        <di:waypoint x="720" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F6b_di" bpmnElement="F6b">
+        <di:waypoint x="820" y="220" />
+        <di:waypoint x="860" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F6c_di" bpmnElement="F6c">
+        <di:waypoint x="960" y="220" />
+        <di:waypoint x="990" y="220" />
+        <di:waypoint x="990" y="360" />
+        <di:waypoint x="1010" y="360" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="FB1_di" bpmnElement="FB1">
+        <di:waypoint x="1080" y="418" />
+        <di:waypoint x="1080" y="460" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="FB1_back_di" bpmnElement="FB1_back">
+        <di:waypoint x="1080" y="460" />
+        <di:waypoint x="1080" y="400" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="1130" y="360" />
+        <di:waypoint x="1200" y="360" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+        <di:waypoint x="1300" y="360" />
+        <di:waypoint x="1350" y="360" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F10b_di" bpmnElement="F10b">
+        <di:waypoint x="1400" y="400" />
+        <di:waypoint x="1400" y="630" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F10c_di" bpmnElement="F10c">
+        <di:waypoint x="1450" y="660" />
+        <di:waypoint x="1500" y="660" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+        <di:waypoint x="1600" y="660" />
+        <di:waypoint x="1645" y="660" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11b_di" bpmnElement="F11b">
+        <di:waypoint x="1670" y="685" />
+        <di:waypoint x="1670" y="740" />
+        <di:waypoint x="1740" y="740" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11c_in_di" bpmnElement="F11c_in">
+        <di:waypoint x="1840" y="740" />
+        <di:waypoint x="1885" y="740" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11c_di" bpmnElement="F11c">
+        <di:waypoint x="1910" y="715" />
+        <di:waypoint x="1910" y="600" />
+        <di:waypoint x="1250" y="600" />
+        <di:waypoint x="1250" y="515" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11d_di" bpmnElement="F11d">
+        <di:waypoint x="1935" y="740" />
+        <di:waypoint x="1980" y="740" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F11e_di" bpmnElement="F11e">
+        <di:waypoint x="2080" y="740" />
+        <di:waypoint x="2150" y="740" />
+        <di:waypoint x="2150" y="490" />
+        <di:waypoint x="1250" y="490" />
+        <di:waypoint x="1250" y="465" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F_MergePlan_di" bpmnElement="F_MergePlan">
+        <di:waypoint x="1250" y="465" />
+        <di:waypoint x="1250" y="400" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <di:waypoint x="1695" y="660" />
+        <di:waypoint x="1750" y="660" />
+        <di:waypoint x="1750" y="440" />
+        <di:waypoint x="1800" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="FB2_di" bpmnElement="FB2">
+        <di:waypoint x="1850" y="498" />
+        <di:waypoint x="1850" y="520" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="FB2b_di" bpmnElement="FB2b">
+        <di:waypoint x="1900" y="550" />
+        <di:waypoint x="1990" y="550" />
+        <di:waypoint x="1990" y="465" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <di:waypoint x="1900" y="440" />
+        <di:waypoint x="1965" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F_MergeTrack_di" bpmnElement="F_MergeTrack">
+        <di:waypoint x="2015" y="440" />
+        <di:waypoint x="2060" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+        <di:waypoint x="2160" y="440" />
+        <di:waypoint x="2210" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17">
+        <di:waypoint x="2310" y="440" />
+        <di:waypoint x="2355" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18">
+        <di:waypoint x="2380" y="415" />
+        <di:waypoint x="2380" y="280" />
+        <di:waypoint x="1250" y="280" />
+        <di:waypoint x="1250" y="320" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19">
+        <di:waypoint x="2380" y="415" />
+        <di:waypoint x="2380" y="370" />
+        <di:waypoint x="2450" y="370" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F20_di" bpmnElement="F20">
+        <di:waypoint x="2550" y="370" />
+        <di:waypoint x="2595" y="370" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F21_di" bpmnElement="F21">
+        <di:waypoint x="2620" y="345" />
+        <di:waypoint x="2620" y="330" />
+        <di:waypoint x="2690" y="330" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F22_di" bpmnElement="F22">
+        <di:waypoint x="2790" y="330" />
+        <di:waypoint x="2860" y="330" />
+        <di:waypoint x="2860" y="345" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F23_di" bpmnElement="F23">
+        <di:waypoint x="2645" y="370" />
+        <di:waypoint x="2835" y="370" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F_MergeTraining_di" bpmnElement="F_MergeTraining">
+        <di:waypoint x="2885" y="370" />
+        <di:waypoint x="2930" y="370" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F24_di" bpmnElement="F24">
+        <di:waypoint x="3030" y="370" />
+        <di:waypoint x="3080" y="370" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="F25_di" bpmnElement="F25">
+        <di:waypoint x="3180" y="370" />
+        <di:waypoint x="3232" y="370" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  
+</bpmn:definitions>
