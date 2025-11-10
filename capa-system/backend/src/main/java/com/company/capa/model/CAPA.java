@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "capa")
@@ -14,6 +15,7 @@ public class CAPA {
     private Long id;
 
     @Column(name = "capa_number", nullable = false, unique = true, length = 20)
+    @Size(max = 20, message = "capaNumber must be at most 20 characters")
     private String capaNumber;
 
     @Column(nullable = false, length = 255)

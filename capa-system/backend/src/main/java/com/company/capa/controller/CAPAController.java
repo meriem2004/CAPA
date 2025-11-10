@@ -7,6 +7,7 @@ import com.company.capa.service.WorkflowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class CAPAController {
     private final WorkflowService workflowService;
 
     @PostMapping
-    public ResponseEntity<CAPA> create(@RequestBody CAPA capa) {
+    public ResponseEntity<CAPA> create(@RequestBody @Valid CAPA capa) {
         CAPA created = capaService.create(capa);
         long piKey = workflowService.startCapaProcess(created);
         created.setProcessInstanceKey(piKey);
