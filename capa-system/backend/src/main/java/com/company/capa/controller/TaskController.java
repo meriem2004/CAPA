@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TaskController {
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("tasks-ok");
+        return ResponseEntity.ok("it's ok i'm ok");
     }
 }
