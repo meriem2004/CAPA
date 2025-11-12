@@ -1,0 +1,3 @@
+# Sensitive configs
+.env
+capa-system/backend/src/main/resources/application.yml
