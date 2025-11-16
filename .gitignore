@@ -1,3 +1,21 @@
 # Sensitive configs
 .env
 capa-system/backend/src/main/resources/application.yml
+
+# Ignore backend build outputs
+capa-system/backend/target/
+**/target/
+
+# Ignore frontend dependencies and build artifacts
+code/node_modules/
+code/.next/
+code/dist/
+code/build/
+
+# OS & IDE noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Prevent accidental binaries
+*.jar
