@@ -1,0 +1,448 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "7b5e780"
+  },
+  "schemaVersion": 19,
+  "id": "form_validate",
+  "components": [
+    {
+      "text": "## 📋 Informations CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header0",
+        "columns": null
+      },
+      "id": "Text_CAPA_Header"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}\n\n**Titre:** {{capaTitle}}\n\n**Département:** {{department}}\n\n**Priorité:** {{priority}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_CAPA_Info",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep1",
+        "columns": null
+      },
+      "id": "Text_Sep1"
+    },
+    {
+      "text": "## 🔍 Résumé de l'analyse des causes",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_Analysis_Header"
+    },
+    {
+      "text": "**Méthode d'analyse:** {{rcaMethod}}\n\n**Causes racines identifiées:**\n\n{{rootCauses}}\n\n**Facteurs contributifs:**\n\n{{contributingFactors}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Analysis_Details",
+        "columns": null
+      },
+      "id": "Text_Analysis_Details"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep2",
+        "columns": null
+      },
+      "id": "Text_Sep2"
+    },
+    {
+      "text": "## 📝 Plan d'actions proposé",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Plan_Header"
+    },
+    {
+      "text": "### Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Header",
+        "columns": null
+      },
+      "id": "Text_Action1_Header"
+    },
+    {
+      "text": "**Type:** {{action1Type}}\n\n**Description:** {{action1Description}}\n\n**Responsable:** {{action1Owner}}\n\n**Date limite:** {{action1Deadline}}\n\n**Ressources nécessaires:** {{action1Resources}}\n\n**Indicateurs de succès:** {{action1KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Details",
+        "columns": null
+      },
+      "id": "Text_Action1_Details"
+    },
+    {
+      "text": "### Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Header",
+        "columns": null
+      },
+      "id": "Text_Action2_Header",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action2Type}}\n\n**Description:** {{action2Description}}\n\n**Responsable:** {{action2Owner}}\n\n**Date limite:** {{action2Deadline}}\n\n**Ressources nécessaires:** {{action2Resources}}\n\n**Indicateurs de succès:** {{action2KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Details",
+        "columns": null
+      },
+      "id": "Text_Action2_Details",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "### Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Header",
+        "columns": null
+      },
+      "id": "Text_Action3_Header",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action3Type}}\n\n**Description:** {{action3Description}}\n\n**Responsable:** {{action3Owner}}\n\n**Date limite:** {{action3Deadline}}\n\n**Ressources nécessaires:** {{action3Resources}}\n\n**Indicateurs de succès:** {{action3KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Details",
+        "columns": null
+      },
+      "id": "Text_Action3_Details",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget total estimé:** {{totalBudget}}\n\n**Délai global:** {{implementationTimeline}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Budget_Summary",
+        "columns": null
+      },
+      "id": "Text_Budget_Summary"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep3",
+        "columns": null
+      },
+      "id": "Text_Sep3"
+    },
+    {
+      "text": "## ⚠️ Évaluation des risques",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Risk_Header"
+    },
+    {
+      "text": "### Risques Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk1_Header",
+        "columns": null
+      },
+      "id": "Text_Risk1_Header"
+    },
+    {
+      "text": "**Risques identifiés:** {{risk1Description}}\n\n**Probabilité:** {{risk1Probability}} | **Gravité:** {{risk1Severity}}\n\n**Mesures de mitigation:** {{risk1Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk1_Details",
+        "columns": null
+      },
+      "id": "Text_Risk1_Details"
+    },
+    {
+      "text": "### Risques Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk2_Header",
+        "columns": null
+      },
+      "id": "Text_Risk2_Header",
+      "conditional": {
+        "hide": "=risk2Description = null or risk2Description = \"\""
+      }
+    },
+    {
+      "text": "**Risques identifiés:** {{risk2Description}}\n\n**Probabilité:** {{risk2Probability}} | **Gravité:** {{risk2Severity}}\n\n**Mesures de mitigation:** {{risk2Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk2_Details",
+        "columns": null
+      },
+      "id": "Text_Risk2_Details",
+      "conditional": {
+        "hide": "=risk2Description = null or risk2Description = \"\""
+      }
+    },
+    {
+      "text": "### Risques Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk3_Header",
+        "columns": null
+      },
+      "id": "Text_Risk3_Header",
+      "conditional": {
+        "hide": "=risk3Description = null or risk3Description = \"\""
+      }
+    },
+    {
+      "text": "**Risques identifiés:** {{risk3Description}}\n\n**Probabilité:** {{risk3Probability}} | **Gravité:** {{risk3Severity}}\n\n**Mesures de mitigation:** {{risk3Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk3_Details",
+        "columns": null
+      },
+      "id": "Text_Risk3_Details",
+      "conditional": {
+        "hide": "=risk3Description = null or risk3Description = \"\""
+      }
+    },
+    {
+      "text": "**Niveau de risque global:** {{globalRiskLevel}}\n\n**Risques résiduels:** {{residualRisks}}\n\n**Recommandations:** {{riskRecommendations}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk_Global",
+        "columns": null
+      },
+      "id": "Text_Risk_Global"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep4",
+        "columns": null
+      },
+      "id": "Text_Sep4"
+    },
+    {
+      "text": "## 💰 Ressources allouées",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header4",
+        "columns": null
+      },
+      "id": "Text_Allocation_Header"
+    },
+    {
+      "text": "### Allocation Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc1_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc1_Header"
+    },
+    {
+      "text": "**Budget alloué:** {{allocatedBudget1}}\n\n**Responsable confirmé:** {{confirmedOwner1}}\n\n**Personnel additionnel:** {{additionalTeam1}}\n\n**Équipements:** {{allocatedEquipment1}}\n\n**Statut:** {{resourceStatus1}}\n\n**Commentaires:** {{allocationComments1}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc1_Details",
+        "columns": null
+      },
+      "id": "Text_Alloc1_Details"
+    },
+    {
+      "text": "### Allocation Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc2_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc2_Header",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget alloué:** {{allocatedBudget2}}\n\n**Responsable confirmé:** {{confirmedOwner2}}\n\n**Personnel additionnel:** {{additionalTeam2}}\n\n**Équipements:** {{allocatedEquipment2}}\n\n**Statut:** {{resourceStatus2}}\n\n**Commentaires:** {{allocationComments2}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc2_Details",
+        "columns": null
+      },
+      "id": "Text_Alloc2_Details",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "### Allocation Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc3_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc3_Header",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget alloué:** {{allocatedBudget3}}\n\n**Responsable confirmé:** {{confirmedOwner3}}\n\n**Personnel additionnel:** {{additionalTeam3}}\n\n**Équipements:** {{allocatedEquipment3}}\n\n**Statut:** {{resourceStatus3}}\n\n**Commentaires:** {{allocationComments3}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc3_Details",
+        "columns": null
+      },
+      "id": "Text_Alloc3_Details",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget total alloué:** {{totalAllocatedBudget}}\n\n**Source de financement:** {{fundingSource}}\n\n**Commentaires de la direction:** {{managementComments}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc_Summary",
+        "columns": null
+      },
+      "id": "Text_Alloc_Summary"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep5",
+        "columns": null
+      },
+      "id": "Text_Sep5"
+    },
+    {
+      "text": "## ✅ Décision de validation",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header5",
+        "columns": null
+      },
+      "id": "Text_Decision_Header"
+    },
+    {
+      "label": "Approuver ce plan d'actions ?",
+      "values": [
+        {
+          "label": "✅ Oui - Approuver le plan",
+          "value": "true"
+        },
+        {
+          "label": "❌ Non - Rejeter le plan",
+          "value": "false"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_Decision",
+        "columns": null
+      },
+      "id": "Field_Decision",
+      "key": "planApprouve",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Raison du rejet",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Rejection_Reason",
+        "columns": null
+      },
+      "id": "Field_Rejection_Reason",
+      "key": "rejectionReason",
+      "validate": {
+        "required": true
+      },
+      "description": "Expliquez pourquoi le plan est rejeté et quels ajustements sont nécessaires",
+      "rows": 5,
+      "conditional": {
+        "hide": "=planApprouve = \"true\""
+      }
+    },
+    {
+      "label": "Commentaires de validation (optionnel)",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Approval_Comments",
+        "columns": null
+      },
+      "id": "Field_Approval_Comments",
+      "key": "approvalComments",
+      "description": "Observations, directives, ou félicitations pour l'équipe",
+      "rows": 3,
+      "conditional": {
+        "hide": "=planApprouve = \"false\""
+      }
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep6",
+        "columns": null
+      },
+      "id": "Text_Sep6"
+    },
+    {
+      "text": "## 📄 Génération du document",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header6",
+        "columns": null
+      },
+      "id": "Text_Doc_Header"
+    },
+    {
+      "text": "ℹ️ Un document Word récapitulatif de cette CAPA sera automatiquement généré après validation.",
+      "type": "text",
+      "layout": {
+        "row": "Row_Doc_Info",
+        "columns": null
+      },
+      "id": "Text_Doc_Info"
+    },
+    {
+      "label": "Soumettre la décision",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
+    }
+  ],
+  "type": "default"
+}

@@ -9,15 +9,17 @@ import io.camunda.client.api.response.ActivatedJob;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConditionalOnBean(CamundaClient.class)
 @RequiredArgsConstructor
-@Slf4j
 public class AlertWorker implements JobHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AlertWorker.class);
 
     private final CamundaClient camundaClient;
     private final NotificationService notificationService;
@@ -37,9 +39,9 @@ public class AlertWorker implements JobHandler {
         if (worker != null) {
             try {
                 worker.close();
-                log.info("AlertWorker closed.");
+                LOG.info("AlertWorker closed.");
             } catch (Exception e) {
-                log.warn("Error closing AlertWorker", e);
+                LOG.warn("Error closing AlertWorker", e);
             }
         }
     }

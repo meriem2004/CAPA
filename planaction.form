@@ -1,0 +1,454 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "7b5e780"
+  },
+  "schemaVersion": 19,
+  "id": "form_action_plan",
+  "components": [
+    {
+      "text": "##  Informations CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header0",
+        "columns": null
+      },
+      "id": "Text_CAPA_Header"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}\n\n**Titre:** {{capaTitle}}\n\n**Département:** {{department}}\n\n**Priorité:** {{priority}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_CAPA_Info",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep1",
+        "columns": null
+      },
+      "id": "Text_Sep1"
+    },
+    {
+      "text": "##  Résumé de l'analyse",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_Analysis_Header"
+    },
+    {
+      "text": "**Méthode d'analyse:** {{rcaMethod}}\n\n**Causes racines identifiées:**\n\n{{rootCauses}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_RCA_Summary",
+        "columns": null
+      },
+      "id": "Text_RCA_Summary"
+    },
+    {
+      "text": "**Facteurs contributifs:**\n\n{{contributingFactors}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Contributing",
+        "columns": null
+      },
+      "id": "Text_Contributing"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep2",
+        "columns": null
+      },
+      "id": "Text_Sep2"
+    },
+    {
+      "text": "##  Plan d'actions correctifs et préventifs",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Plan_Header"
+    },
+    {
+      "text": "Élaborez un plan d'actions SMART (Spécifique, Mesurable, Atteignable, Réaliste, Temporel) pour traiter les causes racines identifiées.",
+      "type": "text",
+      "layout": {
+        "row": "Row_Instructions",
+        "columns": null
+      },
+      "id": "Text_Instructions"
+    },
+    {
+      "text": "### Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Header",
+        "columns": null
+      },
+      "id": "Text_Action1_Header"
+    },
+    {
+      "label": "Type d'action",
+      "values": [
+        {
+          "label": "Action corrective (traite la cause)",
+          "value": "corrective"
+        },
+        {
+          "label": "Action préventive (évite la récurrence)",
+          "value": "preventive"
+        },
+        {
+          "label": "Action d'amélioration",
+          "value": "improvement"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action1_Type",
+        "columns": null
+      },
+      "id": "Field_Action1_Type",
+      "key": "action1Type",
+      "validate": {
+        "required": true
+      },
+      "searchable": true
+    },
+    {
+      "label": "Description de l'action",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Desc",
+        "columns": null
+      },
+      "id": "Field_Action1_Description",
+      "key": "action1Description",
+      "validate": {
+        "required": true,
+        "minLength": 20
+      },
+      "description": "Décrivez précisément l'action à réaliser",
+      "rows": 4
+    },
+    {
+      "label": "Responsable de l'action",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action1_Owner",
+        "columns": null
+      },
+      "id": "Field_Action1_Owner",
+      "key": "action1Owner",
+      "validate": {
+        "required": true
+      },
+      "description": "Nom de la personne responsable"
+    },
+    {
+      "label": "Date limite",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action1_Deadline",
+        "columns": null
+      },
+      "id": "Field_Action1_Deadline",
+      "key": "action1Deadline",
+      "validate": {
+        "required": true
+      },
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "label": "Ressources nécessaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Resources",
+        "columns": null
+      },
+      "id": "Field_Action1_Resources",
+      "key": "action1Resources",
+      "description": "Budget, équipement, personnel, formation, etc.",
+      "rows": 2
+    },
+    {
+      "label": "Indicateurs de succès",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_KPI",
+        "columns": null
+      },
+      "id": "Field_Action1_KPI",
+      "key": "action1KPI",
+      "description": "Comment mesurer le succès de cette action ?",
+      "rows": 2
+    },
+    {
+      "text": "### Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Header",
+        "columns": null
+      },
+      "id": "Text_Action2_Header"
+    },
+    {
+      "label": "Type d'action",
+      "values": [
+        {
+          "label": "Action corrective (traite la cause)",
+          "value": "corrective"
+        },
+        {
+          "label": "Action préventive (évite la récurrence)",
+          "value": "preventive"
+        },
+        {
+          "label": "Action d'amélioration",
+          "value": "improvement"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action2_Type",
+        "columns": null
+      },
+      "id": "Field_Action2_Type",
+      "key": "action2Type",
+      "searchable": true
+    },
+    {
+      "label": "Description de l'action",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_Desc",
+        "columns": null
+      },
+      "id": "Field_Action2_Description",
+      "key": "action2Description",
+      "description": "Décrivez précisément l'action à réaliser",
+      "rows": 4
+    },
+    {
+      "label": "Responsable de l'action",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action2_Owner",
+        "columns": null
+      },
+      "id": "Field_Action2_Owner",
+      "key": "action2Owner",
+      "description": "Nom de la personne responsable"
+    },
+    {
+      "label": "Date limite",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action2_Deadline",
+        "columns": null
+      },
+      "id": "Field_Action2_Deadline",
+      "key": "action2Deadline",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "label": "Ressources nécessaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_Resources",
+        "columns": null
+      },
+      "id": "Field_Action2_Resources",
+      "key": "action2Resources",
+      "description": "Budget, équipement, personnel, formation, etc.",
+      "rows": 2
+    },
+    {
+      "label": "Indicateurs de succès",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_KPI",
+        "columns": null
+      },
+      "id": "Field_Action2_KPI",
+      "key": "action2KPI",
+      "description": "Comment mesurer le succès de cette action ?",
+      "rows": 2
+    },
+    {
+      "text": "### Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Header",
+        "columns": null
+      },
+      "id": "Text_Action3_Header"
+    },
+    {
+      "label": "Type d'action",
+      "values": [
+        {
+          "label": "Action corrective (traite la cause)",
+          "value": "corrective"
+        },
+        {
+          "label": "Action préventive (évite la récurrence)",
+          "value": "preventive"
+        },
+        {
+          "label": "Action d'amélioration",
+          "value": "improvement"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action3_Type",
+        "columns": null
+      },
+      "id": "Field_Action3_Type",
+      "key": "action3Type",
+      "searchable": true
+    },
+    {
+      "label": "Description de l'action",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_Desc",
+        "columns": null
+      },
+      "id": "Field_Action3_Description",
+      "key": "action3Description",
+      "description": "Décrivez précisément l'action à réaliser",
+      "rows": 4
+    },
+    {
+      "label": "Responsable de l'action",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action3_Owner",
+        "columns": null
+      },
+      "id": "Field_Action3_Owner",
+      "key": "action3Owner",
+      "description": "Nom de la personne responsable"
+    },
+    {
+      "label": "Date limite",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action3_Deadline",
+        "columns": null
+      },
+      "id": "Field_Action3_Deadline",
+      "key": "action3Deadline",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "label": "Ressources nécessaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_Resources",
+        "columns": null
+      },
+      "id": "Field_Action3_Resources",
+      "key": "action3Resources",
+      "description": "Budget, équipement, personnel, formation, etc.",
+      "rows": 2
+    },
+    {
+      "label": "Indicateurs de succès",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_KPI",
+        "columns": null
+      },
+      "id": "Field_Action3_KPI",
+      "key": "action3KPI",
+      "description": "Comment mesurer le succès de cette action ?",
+      "rows": 2
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep3",
+        "columns": null
+      },
+      "id": "Text_Sep3"
+    },
+    {
+      "text": "##  Budget et ressources globales",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Budget_Header"
+    },
+    {
+      "label": "Budget total estimé",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Budget",
+        "columns": null
+      },
+      "id": "Field_Budget",
+      "key": "totalBudget",
+      "description": "Montant estimé pour toutes les actions"
+    },
+    {
+      "label": "Délai global de mise en œuvre",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Timeline",
+        "columns": null
+      },
+      "id": "Field_Timeline",
+      "key": "implementationTimeline",
+      "description": "Exemple: 3 mois, 6 semaines, etc."
+    },
+    {
+      "label": "Commentaires sur le plan",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Comments",
+        "columns": null
+      },
+      "id": "Field_Plan_Comments",
+      "key": "planComments",
+      "description": "Remarques, dépendances, contraintes, etc.",
+      "rows": 4
+    },
+    {
+      "label": "Soumettre le plan d'actions",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
+    }
+  ],
+  "type": "default"
+}

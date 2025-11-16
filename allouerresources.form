@@ -1,0 +1,640 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "7b5e780"
+  },
+  "schemaVersion": 19,
+  "id": "form_allocate",
+  "components": [
+    {
+      "text": "## 📋 Informations CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header0",
+        "columns": null
+      },
+      "id": "Text_CAPA_Header"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}\n\n**Titre:** {{capaTitle}}\n\n**Département:** {{department}}\n\n**Priorité:** {{priority}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_CAPA_Info",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep1",
+        "columns": null
+      },
+      "id": "Text_Sep1"
+    },
+    {
+      "text": "## 📝 Plan d'actions proposé",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_Plan_Header"
+    },
+    {
+      "text": "### Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Header",
+        "columns": null
+      },
+      "id": "Text_Action1_Header"
+    },
+    {
+      "text": "**Type:** {{action1Type}}\n\n**Description:** {{action1Description}}\n\n**Responsable suggéré:** {{action1Owner}}\n\n**Date limite:** {{action1Deadline}}\n\n**Ressources demandées:** {{action1Resources}}\n\n**Indicateurs de succès:** {{action1KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Details",
+        "columns": null
+      },
+      "id": "Text_Action1_Details"
+    },
+    {
+      "text": "### Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Header",
+        "columns": null
+      },
+      "id": "Text_Action2_Header",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action2Type}}\n\n**Description:** {{action2Description}}\n\n**Responsable suggéré:** {{action2Owner}}\n\n**Date limite:** {{action2Deadline}}\n\n**Ressources demandées:** {{action2Resources}}\n\n**Indicateurs de succès:** {{action2KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Details",
+        "columns": null
+      },
+      "id": "Text_Action2_Details",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "### Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Header",
+        "columns": null
+      },
+      "id": "Text_Action3_Header",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action3Type}}\n\n**Description:** {{action3Description}}\n\n**Responsable suggéré:** {{action3Owner}}\n\n**Date limite:** {{action3Deadline}}\n\n**Ressources demandées:** {{action3Resources}}\n\n**Indicateurs de succès:** {{action3KPI}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Details",
+        "columns": null
+      },
+      "id": "Text_Action3_Details",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget total estimé:** {{totalBudget}}\n\n**Délai global:** {{implementationTimeline}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Budget_Summary",
+        "columns": null
+      },
+      "id": "Text_Budget_Summary"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep2",
+        "columns": null
+      },
+      "id": "Text_Sep2"
+    },
+    {
+      "text": "## ⚠️ Évaluation des risques",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Risk_Header"
+    },
+    {
+      "text": "### Risques Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk1_Header",
+        "columns": null
+      },
+      "id": "Text_Risk1_Header"
+    },
+    {
+      "text": "**Risques identifiés:** {{risk1Description}}\n\n**Probabilité:** {{risk1Probability}} | **Gravité:** {{risk1Severity}}\n\n**Mesures de mitigation:** {{risk1Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk1_Details",
+        "columns": null
+      },
+      "id": "Text_Risk1_Details"
+    },
+    {
+      "text": "### Risques Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk2_Header",
+        "columns": null
+      },
+      "id": "Text_Risk2_Header",
+      "conditional": {
+        "hide": "=risk2Description = null or risk2Description = \"\""
+      }
+    },
+    {
+      "text": "**Risques identifiés:** {{risk2Description}}\n\n**Probabilité:** {{risk2Probability}} | **Gravité:** {{risk2Severity}}\n\n**Mesures de mitigation:** {{risk2Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk2_Details",
+        "columns": null
+      },
+      "id": "Text_Risk2_Details",
+      "conditional": {
+        "hide": "=risk2Description = null or risk2Description = \"\""
+      }
+    },
+    {
+      "text": "### Risques Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk3_Header",
+        "columns": null
+      },
+      "id": "Text_Risk3_Header",
+      "conditional": {
+        "hide": "=risk3Description = null or risk3Description = \"\""
+      }
+    },
+    {
+      "text": "**Risques identifiés:** {{risk3Description}}\n\n**Probabilité:** {{risk3Probability}} | **Gravité:** {{risk3Severity}}\n\n**Mesures de mitigation:** {{risk3Mitigation}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk3_Details",
+        "columns": null
+      },
+      "id": "Text_Risk3_Details",
+      "conditional": {
+        "hide": "=risk3Description = null or risk3Description = \"\""
+      }
+    },
+    {
+      "text": "**Niveau de risque global:** {{globalRiskLevel}}\n\n**Risques résiduels:** {{residualRisks}}\n\n**Recommandations:** {{riskRecommendations}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk_Global",
+        "columns": null
+      },
+      "id": "Text_Risk_Global"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep3",
+        "columns": null
+      },
+      "id": "Text_Sep3"
+    },
+    {
+      "text": "## 💰 Allocation des ressources",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Allocation_Header"
+    },
+    {
+      "text": "En tant que manager/direction, validez et allouez les ressources nécessaires pour chaque action.",
+      "type": "text",
+      "layout": {
+        "row": "Row_Instructions",
+        "columns": null
+      },
+      "id": "Text_Instructions"
+    },
+    {
+      "text": "### 💵 Allocation Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc1_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc1_Header"
+    },
+    {
+      "label": "Budget alloué (Action 1)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc1_Budget",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Budget",
+      "key": "allocatedBudget1",
+      "validate": {
+        "required": true
+      },
+      "description": "Montant en devise locale (ex: 5000 EUR)"
+    },
+    {
+      "label": "Responsable confirmé (Action 1)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc1_Owner",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Owner",
+      "key": "confirmedOwner1",
+      "validate": {
+        "required": true
+      },
+      "description": "Nom et prénom du responsable final",
+      "defaultValue": "=action1Owner"
+    },
+    {
+      "label": "Personnel additionnel (Action 1)",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc1_Team",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Team",
+      "key": "additionalTeam1",
+      "description": "Noms des personnes affectées en support",
+      "rows": 2
+    },
+    {
+      "label": "Équipements/Outils alloués",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc1_Equipment",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Equipment",
+      "key": "allocatedEquipment1",
+      "description": "Matériel, logiciels, outils nécessaires",
+      "rows": 2
+    },
+    {
+      "label": "Statut de disponibilité",
+      "values": [
+        {
+          "label": "✅ Ressources disponibles immédiatement",
+          "value": "available"
+        },
+        {
+          "label": "⏳ Ressources disponibles sous conditions",
+          "value": "conditional"
+        },
+        {
+          "label": "❌ Ressources insuffisantes",
+          "value": "insufficient"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Alloc1_Status",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Status",
+      "key": "resourceStatus1",
+      "validate": {
+        "required": true
+      },
+      "searchable": true
+    },
+    {
+      "label": "Conditions ou commentaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc1_Comments",
+        "columns": null
+      },
+      "id": "Field_Alloc1_Comments",
+      "key": "allocationComments1",
+      "description": "Précisions, conditions, contraintes",
+      "rows": 3
+    },
+    {
+      "text": "### 💵 Allocation Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc2_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc2_Header",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Budget alloué (Action 2)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc2_Budget",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Budget",
+      "key": "allocatedBudget2",
+      "description": "Montant en devise locale",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Responsable confirmé (Action 2)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc2_Owner",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Owner",
+      "key": "confirmedOwner2",
+      "description": "Nom et prénom du responsable final",
+      "defaultValue": "=action2Owner",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Personnel additionnel (Action 2)",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc2_Team",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Team",
+      "key": "additionalTeam2",
+      "description": "Noms des personnes affectées en support",
+      "rows": 2,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Équipements/Outils alloués",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc2_Equipment",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Equipment",
+      "key": "allocatedEquipment2",
+      "description": "Matériel, logiciels, outils nécessaires",
+      "rows": 2,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Statut de disponibilité",
+      "values": [
+        {
+          "label": "✅ Ressources disponibles immédiatement",
+          "value": "available"
+        },
+        {
+          "label": "⏳ Ressources disponibles sous conditions",
+          "value": "conditional"
+        },
+        {
+          "label": "❌ Ressources insuffisantes",
+          "value": "insufficient"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Alloc2_Status",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Status",
+      "key": "resourceStatus2",
+      "searchable": true,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Conditions ou commentaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc2_Comments",
+        "columns": null
+      },
+      "id": "Field_Alloc2_Comments",
+      "key": "allocationComments2",
+      "description": "Précisions, conditions, contraintes",
+      "rows": 3,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "### 💵 Allocation Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Alloc3_Header",
+        "columns": null
+      },
+      "id": "Text_Alloc3_Header",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Budget alloué (Action 3)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc3_Budget",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Budget",
+      "key": "allocatedBudget3",
+      "description": "Montant en devise locale",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Responsable confirmé (Action 3)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Alloc3_Owner",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Owner",
+      "key": "confirmedOwner3",
+      "description": "Nom et prénom du responsable final",
+      "defaultValue": "=action3Owner",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Personnel additionnel (Action 3)",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc3_Team",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Team",
+      "key": "additionalTeam3",
+      "description": "Noms des personnes affectées en support",
+      "rows": 2,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Équipements/Outils alloués",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc3_Equipment",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Equipment",
+      "key": "allocatedEquipment3",
+      "description": "Matériel, logiciels, outils nécessaires",
+      "rows": 2,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Statut de disponibilité",
+      "values": [
+        {
+          "label": "✅ Ressources disponibles immédiatement",
+          "value": "available"
+        },
+        {
+          "label": "⏳ Ressources disponibles sous conditions",
+          "value": "conditional"
+        },
+        {
+          "label": "❌ Ressources insuffisantes",
+          "value": "insufficient"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Alloc3_Status",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Status",
+      "key": "resourceStatus3",
+      "searchable": true,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Conditions ou commentaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Alloc3_Comments",
+        "columns": null
+      },
+      "id": "Field_Alloc3_Comments",
+      "key": "allocationComments3",
+      "description": "Précisions, conditions, contraintes",
+      "rows": 3,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep4",
+        "columns": null
+      },
+      "id": "Text_Sep4"
+    },
+    {
+      "text": "## 📊 Validation globale",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header4",
+        "columns": null
+      },
+      "id": "Text_Validation_Header"
+    },
+    {
+      "label": "Budget total alloué",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Total_Budget",
+        "columns": null
+      },
+      "id": "Field_Total_Budget",
+      "key": "totalAllocatedBudget",
+      "validate": {
+        "required": true
+      },
+      "description": "Somme totale des budgets alloués"
+    },
+    {
+      "label": "Source de financement",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Funding",
+        "columns": null
+      },
+      "id": "Field_Funding",
+      "key": "fundingSource",
+      "description": "Budget CAPA, budget département, investissement, etc.",
+      "rows": 2
+    },
+    {
+      "label": "Commentaires de la direction",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Mgmt_Comments",
+        "columns": null
+      },
+      "id": "Field_Mgmt_Comments",
+      "key": "managementComments",
+      "description": "Observations, directives, attentes particulières",
+      "rows": 4
+    },
+    {
+      "label": "Valider l'allocation des ressources",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
+    }
+  ],
+  "type": "default"
+}

@@ -1,0 +1,347 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "7b5e780"
+  },
+  "schemaVersion": 19,
+  "id": "form_root_cause",
+  "components": [
+    {
+      "text": "## Informations de la CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_001",
+        "columns": null
+      },
+      "id": "Text_CapaNumber"
+    },
+    {
+      "text": "**Titre de la CAPA:** {{title}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_002",
+        "columns": null
+      },
+      "id": "Text_Title"
+    },
+    {
+      "text": "**Catégorie:** {{capaCategory}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_003",
+        "columns": null
+      },
+      "id": "Text_Category"
+    },
+    {
+      "text": "**Département concerné:** {{department}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_004",
+        "columns": null
+      },
+      "id": "Text_Department"
+    },
+    {
+      "text": "## Contexte de l'événement",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Context_Header"
+    },
+    {
+      "text": "**Événement détecté:** {{textfield_5505ur}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_005",
+        "columns": null
+      },
+      "id": "Text_Event"
+    },
+    {
+      "text": "**Gravité:** {{severity}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_006",
+        "columns": null
+      },
+      "id": "Text_Severity"
+    },
+    {
+      "text": "**Fréquence:** {{frequency}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_007",
+        "columns": null
+      },
+      "id": "Text_Frequency"
+    },
+    {
+      "text": "**Justification de l'évaluation:**\n\n{{justification}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_008",
+        "columns": null
+      },
+      "id": "Text_Justification"
+    },
+    {
+      "text": "## Détails du problème",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Problem_Header"
+    },
+    {
+      "text": "**Description détaillée:**\n\n{{detailedDescription}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_009",
+        "columns": null
+      },
+      "id": "Text_DetailedDesc"
+    },
+    {
+      "text": "**Impact observé ou potentiel:**\n\n{{impact}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_010",
+        "columns": null
+      },
+      "id": "Text_Impact"
+    },
+    {
+      "text": "**Produits/Services concernés:** {{productsAffected}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_011",
+        "columns": null
+      },
+      "id": "Text_Products"
+    },
+    {
+      "text": "**Client(s) impacté(s):** {{customersImpacted}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_012",
+        "columns": null
+      },
+      "id": "Text_Customers"
+    },
+    {
+      "text": "**Preuves et documents:**\n\n{{evidence}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_013",
+        "columns": null
+      },
+      "id": "Text_Evidence"
+    },
+    {
+      "text": "**Priorité:** {{priority}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_014",
+        "columns": null
+      },
+      "id": "Text_Priority"
+    },
+    {
+      "text": "**Date cible pour la résolution:** {{targetResolutionDate}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_015",
+        "columns": null
+      },
+      "id": "Text_TargetDate"
+    },
+    {
+      "text": "**Responsable CAPA suggéré:** {{suggestedOwner}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_016",
+        "columns": null
+      },
+      "id": "Text_Owner"
+    },
+    {
+      "text": "**Déclarant:** {{reporter}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_017",
+        "columns": null
+      },
+      "id": "Text_Reporter"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Separator",
+        "columns": null
+      },
+      "id": "Text_Separator"
+    },
+    {
+      "text": "## 🔍 Analyse des causes racines",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header4",
+        "columns": null
+      },
+      "id": "Text_RCA_Header"
+    },
+    {
+      "text": "Utilisez une méthode d'analyse appropriée (5 Pourquoi, Diagramme d'Ishikawa, Arbre des causes, etc.) pour identifier les causes profondes du problème.",
+      "type": "text",
+      "layout": {
+        "row": "Row_RCA_Instructions",
+        "columns": null
+      },
+      "id": "Text_RCA_Instructions"
+    },
+    {
+      "label": "Méthode d'analyse utilisée",
+      "values": [
+        {
+          "label": "5 Pourquoi (5 Whys)",
+          "value": "5_whys"
+        },
+        {
+          "label": "Diagramme d'Ishikawa (Fishbone)",
+          "value": "ishikawa"
+        },
+        {
+          "label": "Arbre des causes",
+          "value": "fault_tree"
+        },
+        {
+          "label": "Analyse de Pareto",
+          "value": "pareto"
+        },
+        {
+          "label": "FMEA (Analyse des modes de défaillance)",
+          "value": "fmea"
+        },
+        {
+          "label": "Autre méthode",
+          "value": "autre"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Method",
+        "columns": null
+      },
+      "id": "Field_RCA_Method",
+      "key": "rcaMethod",
+      "validate": {
+        "required": true
+      },
+      "searchable": true
+    },
+    {
+      "label": "Causes racines identifiées",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_RCA",
+        "columns": null
+      },
+      "id": "Field_Root_Causes",
+      "key": "rootCauses",
+      "validate": {
+        "required": true,
+        "minLength": 20
+      },
+      "description": "Décrivez en détail les causes profondes identifiées. Distinguez les causes immédiates des causes systémiques.",
+      "rows": 8
+    },
+    {
+      "label": "Facteurs contributifs",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Contributing",
+        "columns": null
+      },
+      "id": "Field_Contributing_Factors",
+      "key": "contributingFactors",
+      "description": "Listez les facteurs qui ont contribué ou aggravé le problème (environnement, formation, équipement, procédures, etc.)",
+      "rows": 5
+    },
+    {
+      "label": "Diagramme ou schéma d'analyse",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Diagram",
+        "columns": null
+      },
+      "id": "Field_Analysis_Diagram",
+      "key": "analysisDiagram",
+      "description": "Décrivez ou référencez le diagramme d'analyse utilisé (à joindre en pièce jointe)",
+      "rows": 3
+    },
+    {
+      "label": "Personnes impliquées dans l'analyse",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Team",
+        "columns": null
+      },
+      "id": "Field_Analysis_Team",
+      "key": "analysisTeam",
+      "description": "Noms des personnes ayant participé à l'analyse"
+    },
+    {
+      "label": "Date de l'analyse",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Analysis_Date",
+        "columns": null
+      },
+      "id": "Field_Analysis_Date",
+      "key": "analysisDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "label": "Commentaires additionnels",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Comments",
+        "columns": null
+      },
+      "id": "Field_RCA_Comments",
+      "key": "rcaComments",
+      "description": "Toute information complémentaire pertinente pour l'analyse",
+      "rows": 4
+    },
+    {
+      "label": "Soumettre l'analyse",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
+    }
+  ],
+  "type": "default"
+}
