@@ -61,6 +61,12 @@
       <artifactId>ooxml-schemas</artifactId>
       <version>1.4</version>
     </dependency>
+    <!-- MinIO Java SDK for S3-compatible storage -->
+    <dependency>
+      <groupId>io.minio</groupId>
+      <artifactId>minio</artifactId>
+      <version>8.5.9</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -3,15 +3,18 @@ package com.company.capa.worker;
 import com.company.capa.model.Document;
 import com.company.capa.repository.DocumentRepository;
 import com.company.capa.service.CapaDocumentService;
+import com.company.capa.service.MinioStorageService;
 import io.camunda.client.CamundaClient;
 import io.camunda.client.api.response.ActivatedJob;
 import io.camunda.client.api.worker.JobClient;
 import io.camunda.client.api.worker.JobHandler;
 import io.camunda.client.api.worker.JobWorker;
+import io.minio.ObjectWriteResponse;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +30,20 @@ public class CapaDocumentWorker implements JobHandler {
     private final CamundaClient camundaClient;
     private final CapaDocumentService documentService;
     private final DocumentRepository documentRepository;
+    private final MinioStorageService storageService;
     private JobWorker worker;
+
+    @Value("${minio.bucket}")
+    private String bucketName;
 
     public CapaDocumentWorker(CamundaClient camundaClient,
                               CapaDocumentService documentService,
-                              DocumentRepository documentRepository) {
+                              DocumentRepository documentRepository,
+                              MinioStorageService storageService) {
         this.camundaClient = camundaClient;
         this.documentService = documentService;
         this.documentRepository = documentRepository;
+        this.storageService = storageService;
     }
 
     @PostConstruct
@@ -73,17 +82,26 @@ public class CapaDocumentWorker implements JobHandler {
                     capaNumber,
                     LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")));
 
-            // Persist to disk under ./capa-documents
-            java.nio.file.Path dir = java.nio.file.Paths.get("capa-documents");
-            java.nio.file.Files.createDirectories(dir);
-            java.nio.file.Path filePath = dir.resolve(filename);
-            java.nio.file.Files.write(filePath, docBytes);
+            // Build MinIO object key
+            String objectKey = "documents/" + filename;
+
+            // Upload to MinIO
+            ObjectWriteResponse resp = storageService.upload(
+                    docBytes,
+                    bucketName,
+                    objectKey,
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            );
 
             // Save metadata to DB
             Document document = new Document();
             document.setFileName(filename);
-            document.setFilePath(filePath.toAbsolutePath().toString());
             document.setFileSize((long) docBytes.length);
+            document.setS3Bucket(bucketName);
+            document.setS3Key(objectKey);
+            document.setETag(resp.etag());
+            // Versioning returns null unless bucket versioning is enabled in MinIO
+            document.setS3VersionId(resp.versionId());
             Document savedDoc = documentRepository.save(document);
 
             LOG.info("Document saved successfully with ID: {}", savedDoc.getId());
@@ -93,7 +111,10 @@ public class CapaDocumentWorker implements JobHandler {
                     .variables(Map.of(
                             "documentId", savedDoc.getId(),
                             "documentFileName", filename,
-                            "documentPath", filePath.toString(),
+                            "s3Bucket", bucketName,
+                            "s3Key", objectKey,
+                            "eTag", resp.etag(),
+                            "s3VersionId", resp.versionId(),
                             "documentGeneratedAt", LocalDateTime.now().toString()
                     ))
                     .send()
