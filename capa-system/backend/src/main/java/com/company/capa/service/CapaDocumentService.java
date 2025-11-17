@@ -11,6 +11,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+// OpenPDF imports
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Document;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Element;
+import java.awt.Color;
+
 @Service
 public class CapaDocumentService {
     
@@ -59,6 +73,176 @@ public class CapaDocumentService {
         document.close();
         
         return baos.toByteArray();
+    }
+    
+    // === New: Generate PDF version using OpenPDF ===
+    public byte[] generateCapaPdf(Map<String, Object> variables) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document pdf = new Document(PageSize.A4, 36, 36, 36, 36);
+        PdfWriter.getInstance(pdf, baos);
+        pdf.open();
+
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, Color.BLACK);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, new Color(31, 97, 141));
+        Font keyFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, Color.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 11, Color.BLACK);
+        Font smallGrayFont = FontFactory.getFont(FontFactory.HELVETICA, 9, new Color(128, 128, 128));
+
+        // Header (date)
+        Paragraph header = new Paragraph("Date de génération: " + LocalDateTime.now().format(DATE_FORMATTER), smallGrayFont);
+        header.setAlignment(Element.ALIGN_RIGHT);
+        pdf.add(header);
+        pdf.add(new Paragraph("\n"));
+
+        // Title
+        Paragraph title = new Paragraph("Rapport CAPA - " + getString(variables, "capaNumber"), titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        pdf.add(title);
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Informations CAPA
+        pdf.add(new Paragraph("📋 Informations CAPA", headerFont));
+        pdf.add(new Paragraph("\n"));
+        PdfPTable infoTable = createTwoColumnTable();
+        addTableRow(infoTable, "Numéro CAPA", getString(variables, "capaNumber"), keyFont, normalFont);
+        addTableRow(infoTable, "Titre", getString(variables, "capaTitle"), keyFont, normalFont);
+        addTableRow(infoTable, "Département", getString(variables, "department"), keyFont, normalFont);
+        addTableRow(infoTable, "Priorité", getString(variables, "priority"), keyFont, normalFont);
+        pdf.add(infoTable);
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Analyse des causes racines
+        pdf.add(new Paragraph("🔍 Analyse des causes racines", headerFont));
+        pdf.add(new Paragraph("\n"));
+        addKeyValueParagraph(pdf, "Méthode d'analyse", getString(variables, "rcaMethod"), keyFont, normalFont);
+        pdf.add(new Paragraph("Causes racines identifiées", keyFont));
+        pdf.add(new Paragraph(getString(variables, "rootCauses"), normalFont));
+        pdf.add(new Paragraph("\n"));
+        pdf.add(new Paragraph("Facteurs contributifs", keyFont));
+        pdf.add(new Paragraph(getString(variables, "contributingFactors"), normalFont));
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Plan d'actions
+        pdf.add(new Paragraph("📝 Plan d'actions", headerFont));
+        pdf.add(new Paragraph("\n"));
+        addActionPdf(pdf, variables, 1, keyFont, normalFont);
+        if (hasValue(variables, "action2Description")) {
+            addActionPdf(pdf, variables, 2, keyFont, normalFont);
+        }
+        if (hasValue(variables, "action3Description")) {
+            addActionPdf(pdf, variables, 3, keyFont, normalFont);
+        }
+        PdfPTable summaryTable = createTwoColumnTable();
+        addTableRow(summaryTable, "Budget total estimé", getString(variables, "totalBudget"), keyFont, normalFont);
+        addTableRow(summaryTable, "Délai global", getString(variables, "implementationTimeline"), keyFont, normalFont);
+        pdf.add(summaryTable);
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Évaluation des risques
+        pdf.add(new Paragraph("⚠️ Évaluation des risques", headerFont));
+        pdf.add(new Paragraph("\n"));
+        addRiskPdf(pdf, variables, 1, keyFont, normalFont);
+        if (hasValue(variables, "risk2Description")) {
+            addRiskPdf(pdf, variables, 2, keyFont, normalFont);
+        }
+        if (hasValue(variables, "risk3Description")) {
+            addRiskPdf(pdf, variables, 3, keyFont, normalFont);
+        }
+        pdf.add(new Paragraph("Synthèse des risques", keyFont));
+        PdfPTable riskSummary = createTwoColumnTable();
+        addTableRow(riskSummary, "Niveau de risque global", getString(variables, "globalRiskLevel"), keyFont, normalFont);
+        addTableRow(riskSummary, "Risques résiduels", getString(variables, "residualRisks"), keyFont, normalFont);
+        addTableRow(riskSummary, "Recommandations", getString(variables, "riskRecommendations"), keyFont, normalFont);
+        pdf.add(riskSummary);
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Ressources allouées
+        pdf.add(new Paragraph("💰 Ressources allouées", headerFont));
+        pdf.add(new Paragraph("\n"));
+        addAllocationPdf(pdf, variables, 1, keyFont, normalFont);
+        if (hasValue(variables, "action2Description")) {
+            addAllocationPdf(pdf, variables, 2, keyFont, normalFont);
+        }
+        pdf.add(new Paragraph("\n"));
+
+        // Section: Décision de validation
+        pdf.add(new Paragraph("✅ Décision de validation", headerFont));
+        pdf.add(new Paragraph("\n"));
+        addKeyValueParagraph(pdf, "Décision", getString(variables, "validationDecision"), keyFont, normalFont);
+        if (hasValue(variables, "validationComments")) {
+            addKeyValueParagraph(pdf, "Commentaires", getString(variables, "validationComments"), keyFont, normalFont);
+        }
+
+        // Footer
+        Paragraph footer = new Paragraph("Document généré automatiquement par le système CAPA.", smallGrayFont);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        pdf.add(new Paragraph("\n"));
+        pdf.add(footer);
+
+        pdf.close();
+        return baos.toByteArray();
+    }
+
+    private PdfPTable createTwoColumnTable() {
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(5);
+        table.setSpacingAfter(5);
+        return table;
+    }
+
+    private void addTableRow(PdfPTable table, String key, String value, Font keyFont, Font valueFont) {
+        PdfPCell keyCell = new PdfPCell(new Phrase(key, keyFont));
+        keyCell.setBackgroundColor(new Color(240, 240, 240));
+        keyCell.setPadding(6);
+        table.addCell(keyCell);
+
+        PdfPCell valCell = new PdfPCell(new Phrase(value != null ? value : "", valueFont));
+        valCell.setPadding(6);
+        table.addCell(valCell);
+    }
+
+    private void addKeyValueParagraph(Document pdf, String key, String value, Font keyFont, Font valueFont) throws DocumentException {
+        Paragraph p = new Paragraph(key + ": ", keyFont);
+        p.add(new Phrase(value != null ? value : "", valueFont));
+        pdf.add(p);
+    }
+
+    private void addActionPdf(Document pdf, Map<String, Object> variables, int actionNum, Font keyFont, Font normalFont) throws DocumentException {
+        String prefix = "action" + actionNum;
+        pdf.add(new Paragraph("Action " + actionNum, keyFont));
+        PdfPTable t = createTwoColumnTable();
+        addTableRow(t, "Type", getString(variables, prefix + "Type"), keyFont, normalFont);
+        addTableRow(t, "Description", getString(variables, prefix + "Description"), keyFont, normalFont);
+        addTableRow(t, "Responsable", getString(variables, prefix + "Owner"), keyFont, normalFont);
+        addTableRow(t, "Date limite", getString(variables, prefix + "Deadline"), keyFont, normalFont);
+        addTableRow(t, "Ressources nécessaires", getString(variables, prefix + "Resources"), keyFont, normalFont);
+        addTableRow(t, "Indicateurs de succès", getString(variables, prefix + "KPI"), keyFont, normalFont);
+        pdf.add(t);
+        pdf.add(new Paragraph("\n"));
+    }
+
+    private void addRiskPdf(Document pdf, Map<String, Object> variables, int riskNum, Font keyFont, Font normalFont) throws DocumentException {
+        String prefix = "risk" + riskNum;
+        pdf.add(new Paragraph("Risques Action " + riskNum, keyFont));
+        PdfPTable t = createTwoColumnTable();
+        addTableRow(t, "Risques identifiés", getString(variables, prefix + "Description"), keyFont, normalFont);
+        addTableRow(t, "Probabilité", getString(variables, prefix + "Probability"), keyFont, normalFont);
+        addTableRow(t, "Gravité", getString(variables, prefix + "Severity"), keyFont, normalFont);
+        addTableRow(t, "Mesures de mitigation", getString(variables, prefix + "Mitigation"), keyFont, normalFont);
+        pdf.add(t);
+        pdf.add(new Paragraph("\n"));
+    }
+
+    private void addAllocationPdf(Document pdf, Map<String, Object> variables, int allocNum, Font keyFont, Font normalFont) throws DocumentException {
+        String prefix = "action" + allocNum;
+        pdf.add(new Paragraph("Allocation " + allocNum, keyFont));
+        PdfPTable t = createTwoColumnTable();
+        addTableRow(t, "Budget", getString(variables, prefix + "Budget"), keyFont, normalFont);
+        addTableRow(t, "Ressources", getString(variables, prefix + "Resources"), keyFont, normalFont);
+        addTableRow(t, "Équipe assignée", getString(variables, prefix + "Team"), keyFont, normalFont);
+        pdf.add(t);
+        pdf.add(new Paragraph("\n"));
     }
     
     private void addHeader(XWPFDocument document, Map<String, Object> variables) {

@@ -19,9 +19,14 @@ public class MinioConfig {
                 "Missing MinIO configuration. Please set MINIO_URL, MINIO_ACCESS_KEY and MINIO_SECRET_KEY environment variables or corresponding Spring properties."
             );
         }
+        // Trim to avoid signature mismatch due to accidental spaces/newlines
+        String endpoint = url.trim();
+        String ak = accessKey.trim();
+        String sk = secretKey.trim();
+
         return MinioClient.builder()
-                .endpoint(url)
-                .credentials(accessKey, secretKey)
+                .endpoint(endpoint)
+                .credentials(ak, sk)
                 .build();
     }
 }

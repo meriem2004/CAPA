@@ -19,7 +19,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
 
 @Component
 @ConditionalOnBean(CamundaClient.class)
@@ -51,6 +54,9 @@ public class CapaDocumentWorker implements JobHandler {
         worker = camundaClient.newWorker()
                 .jobType("generate-capa-document")
                 .handler(this)
+                .timeout(Duration.ofMinutes(10))
+                .maxJobsActive(10)
+                .pollInterval(Duration.ofMillis(200))
                 .name("capa-document-worker")
                 .open();
     }
@@ -73,50 +79,55 @@ public class CapaDocumentWorker implements JobHandler {
         try {
             Map<String, Object> variables = job.getVariablesAsMap();
 
-            // Generate Word document
-            byte[] docBytes = documentService.generateCapaDocument(variables);
+            // Generate PDF directly from variables
+            byte[] pdfBytes = documentService.generateCapaPdf(variables);
 
-            // Create filename
+            // Create filename (PDF)
             String capaNumber = variables.getOrDefault("capaNumber", "N/A").toString();
-            String filename = String.format("CAPA_%s_%s.docx",
+            String filename = String.format("CAPA_%s_%s.pdf",
                     capaNumber,
                     LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")));
 
             // Build MinIO object key
             String objectKey = "documents/" + filename;
 
-            // Upload to MinIO
+            // Upload to MinIO (PDF)
             ObjectWriteResponse resp = storageService.upload(
-                    docBytes,
+                    pdfBytes,
                     bucketName,
                     objectKey,
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    "application/pdf"
             );
 
-            // Save metadata to DB
+            // Save metadata to DB (PDF)
             Document document = new Document();
             document.setFileName(filename);
-            document.setFileSize((long) docBytes.length);
+            document.setFileSize((long) pdfBytes.length);
             document.setS3Bucket(bucketName);
             document.setS3Key(objectKey);
             document.setETag(resp.etag());
-            // Versioning returns null unless bucket versioning is enabled in MinIO
             document.setS3VersionId(resp.versionId());
             Document savedDoc = documentRepository.save(document);
 
-            LOG.info("Document saved successfully with ID: {}", savedDoc.getId());
+            LOG.info("PDF saved successfully: ID={}", savedDoc.getId());
 
-            // Complete the job with document metadata
+            // Complete the job with document metadata (PDF only)
+            Map<String, Object> completionVars = new HashMap<>();
+            completionVars.put("documentId", savedDoc.getId());
+            completionVars.put("documentFileName", filename);
+            completionVars.put("s3Bucket", bucketName);
+            completionVars.put("s3Key", objectKey);
+            completionVars.put("eTag", resp.etag());
+            completionVars.put("s3VersionId", Objects.toString(resp.versionId(), ""));
+            completionVars.put("pdfDocumentId", savedDoc.getId());
+            completionVars.put("pdfFileName", filename);
+            completionVars.put("pdfS3Key", objectKey);
+            completionVars.put("pdfETag", resp.etag());
+            completionVars.put("pdfS3VersionId", Objects.toString(resp.versionId(), ""));
+            completionVars.put("documentGeneratedAt", LocalDateTime.now().toString());
+
             client.newCompleteCommand(job.getKey())
-                    .variables(Map.of(
-                            "documentId", savedDoc.getId(),
-                            "documentFileName", filename,
-                            "s3Bucket", bucketName,
-                            "s3Key", objectKey,
-                            "eTag", resp.etag(),
-                            "s3VersionId", resp.versionId(),
-                            "documentGeneratedAt", LocalDateTime.now().toString()
-                    ))
+                    .variables(completionVars)
                     .send()
                     .join();
         } catch (Exception e) {

@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 2,
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.39.0"
+  },
+  "components": [
+    {
+      "type": "text",
+      "id": "capaNumber",
+      "label": "Numéro CAPA",
+      "key": "capaNumber",
+      "disabled": true,
+      "defaultValue": "={{capaNumber}}"
+    },
+    {
+      "type": "text",
+      "id": "actionTitle",
+      "label": "Titre de l'action",
+      "key": "actionTitle",
+      "disabled": true,
+      "defaultValue": "={{actionTitle}}"
+    },
+    {
+      "type": "text",
+      "id": "actionId",
+      "label": "ID de l'action",
+      "key": "actionId",
+      "disabled": true,
+      "defaultValue": "={{actionId}}"
+    },
+    {
+      "type": "group",
+      "id": "documentSection",
+      "label": "📄 Document CAPA généré",
+      "path": "documentSection",
+      "components": [
+        {
+          "type": "html",
+          "id": "docPreview",
+          "html": "<div style='background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px;'>\n<h4 style='margin:0 0 10px 0;'>📋 Document CAPA</h4>\n<p style='margin:5px 0;'><strong>Nom:</strong> {{pdfFileName}}</p>\n<p style='margin:5px 0;'><strong>Généré le:</strong> {{documentGeneratedAt}}</p>\n<p style='margin:5px 0;'><strong>Taille:</strong> {{pdfFileSize}}</p>\n<p style='margin:5px 0;'><strong>Chemin MinIO:</strong> {{s3Bucket}}/{{pdfS3Key}}</p>\n<p style='margin:10px 0;'><a href=\"http://localhost:9000/{{s3Bucket}}/{{pdfS3Key}}\" target=\"_blank\" rel=\"noopener\" style='text-decoration:none;background:#0d6efd;color:#fff;padding:8px 12px;border-radius:6px;'>👁️ Ouvrir dans MinIO</a></p>\n</div>"
+        }
+      ]
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "group",
+      "id": "executionSteps",
+      "label": "✅ Étapes d'exécution",
+      "path": "executionSteps",
+      "components": [
+        {
+          "type": "checklist",
+          "id": "stepsList",
+          "label": "Cochez les étapes complétées",
+          "key": "completedSteps",
+          "validate": {
+            "required": true
+          },
+          "values": [
+            {
+              "label": "Préparation des ressources nécessaires",
+              "value": "step1"
+            },
+            {
+              "label": "Mise en œuvre de l'action corrective/préventive",
+              "value": "step2"
+            },
+            {
+              "label": "Vérification de la mise en œuvre",
+              "value": "step3"
+            },
+            {
+              "label": "Documentation des preuves d'exécution",
+              "value": "step4"
+            },
+            {
+              "label": "Communication aux parties prenantes",
+              "value": "step5"
+            }
+          ]
+        },
+        {
+          "type": "number",
+          "id": "progressPercentage",
+          "label": "Pourcentage d'avancement global (%)",
+          "key": "progressPercentage",
+          "validate": {
+            "required": true,
+            "min": 0,
+            "max": 100
+          },
+          "defaultValue": 0,
+          "increment": 10
+        }
+      ]
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "group",
+      "id": "evidenceGroup",
+      "label": "📎 Preuves d'exécution",
+      "path": "evidence",
+      "components": [
+        {
+          "type": "textarea",
+          "id": "executionDescription",
+          "label": "Description détaillée de l'exécution",
+          "key": "executionDescription",
+          "validate": {
+            "required": true,
+            "minLength": 50
+          },
+          "rows": 4,
+          "description": "Décrivez comment l'action a été exécutée (minimum 50 caractères)"
+        },
+        {
+          "type": "textarea",
+          "id": "evidenceFiles",
+          "label": "Liste des fichiers de preuve uploadés sur MinIO",
+          "key": "evidenceFilesList",
+          "rows": 3,
+          "description": "Format: nom_fichier.ext (un par ligne)",
+          "placeholder": "photo_avant.jpg\nphoto_apres.jpg\nrapport_verification.pdf"
+        },
+        {
+          "type": "textfield",
+          "id": "minioPathEvidence",
+          "label": "Chemin MinIO des preuves",
+          "key": "minioEvidencePath",
+          "description": "Ex: capadocuments/CAPA-XXXX/evidence/",
+          "defaultValue": "={{\"capadocuments/\" + capaNumber + \"/evidence/\"}}"
+        },
+        {
+          "type": "checkbox",
+          "id": "evidenceUploaded",
+          "label": "Preuves uploadées",
+          "key": "evidenceUploaded",
+          "description": "Cochez si au moins un fichier de preuve a été déposé dans MinIO"
+        }
+      ]
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "group",
+      "id": "issuesGroup",
+      "label": "⚠️ Obstacles et solutions",
+      "path": "issues",
+      "components": [
+        {
+          "type": "radio",
+          "id": "hasObstacles",
+          "label": "Des obstacles ont-ils été rencontrés ?",
+          "key": "hasObstacles",
+          "validate": {
+            "required": true
+          },
+          "values": [
+            {
+              "label": "Oui",
+              "value": "yes"
+            },
+            {
+              "label": "Non",
+              "value": "no"
+            }
+          ],
+          "defaultValue": "no"
+        },
+        {
+          "type": "textarea",
+          "id": "obstaclesDescription",
+          "label": "Description des obstacles rencontrés",
+          "key": "obstaclesDescription",
+          "rows": 3,
+          "conditional": {
+            "hide": "=hasObstacles != \"yes\""
+          },
+          "validate": {
+            "required": "=hasObstacles = \"yes\""
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "solutionsApplied",
+          "label": "Solutions apportées",
+          "key": "solutionsApplied",
+          "rows": 3,
+          "conditional": {
+            "hide": "=hasObstacles != \"yes\""
+          },
+          "validate": {
+            "required": "=hasObstacles = \"yes\""
+          }
+        }
+      ]
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "group",
+      "id": "datesGroup",
+      "label": "📅 Dates",
+      "path": "dates",
+      "components": [
+        {
+          "type": "datetime",
+          "id": "actualExecutionDate",
+          "label": "Date d'exécution réelle",
+          "key": "actualExecutionDate",
+          "validate": {
+            "required": true
+          },
+          "dateLabel": "Date",
+          "timeLabel": "Heure",
+          "timeSerializingFormat": "utc_offset",
+          "timeInterval": 15
+        },
+        {
+          "type": "datetime",
+          "id": "plannedDeadline",
+          "label": "Date limite prévue",
+          "key": "plannedDeadline",
+          "disabled": true,
+          "defaultValue": "={{dateEcheance}}"
+        }
+      ]
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "type": "group",
+      "id": "validationGroup",
+      "label": "✓ Validation",
+      "path": "validation",
+      "components": [
+        {
+          "type": "checkbox",
+          "id": "confirmCompletion",
+          "label": "Je confirme que l'action a été exécutée conformément au plan",
+          "key": "confirmCompletion",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "additionalComments",
+          "label": "Commentaires additionnels",
+          "key": "additionalComments",
+          "rows": 2
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "id": "submitExecution",
+      "label": "✅ Valider l'exécution",
+      "action": "submit",
+      "key": "submit"
+    }
+  ],
+  "type": "default",
+  "id": "form_execute",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.4.0"
+}
