@@ -1,10 +1,15 @@
 package com.company.capa.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "document")
+@Getter
+@Setter
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,35 +43,4 @@ public class Document {
 
     @Column(name = "uploaded_at")
     private LocalDateTime uploadedAt = LocalDateTime.now();
-
-    // explicit getters and setters to avoid Lombok dependency
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public CAPA getCapa() { return capa; }
-    public void setCapa(CAPA capa) { this.capa = capa; }
-
-    public String getFileName() { return fileName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
-
-    public String getS3Bucket() { return s3Bucket; }
-    public void setS3Bucket(String s3Bucket) { this.s3Bucket = s3Bucket; }
-
-    public String getS3Key() { return s3Key; }
-    public void setS3Key(String s3Key) { this.s3Key = s3Key; }
-
-    public String getS3VersionId() { return s3VersionId; }
-    public void setS3VersionId(String s3VersionId) { this.s3VersionId = s3VersionId; }
-
-    public String getETag() { return eTag; }
-    public void setETag(String eTag) { this.eTag = eTag; }
-
-    public Long getFileSize() { return fileSize; }
-    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
-
-    public User getUploadedBy() { return uploadedBy; }
-    public void setUploadedBy(User uploadedBy) { this.uploadedBy = uploadedBy; }
-
-    public LocalDateTime getUploadedAt() { return uploadedAt; }
-    public void setUploadedAt(LocalDateTime uploadedAt) { this.uploadedAt = uploadedAt; }
 }
