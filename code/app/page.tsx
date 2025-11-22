@@ -10,6 +10,7 @@ import { DeclarantCapaForm } from '@/components/declarant/declarant-capa-form'
 import { QualiteRcaForm } from '@/components/qualite/qualite-rca-form'
 import { QualiteActionPlanForm } from '@/components/qualite/qualite-action-plan-form'
 import { QualiteRiskAssessmentForm } from '@/components/qualite/qualite-risk-assessment-form'
+import { QualiteDocuments } from '@/components/qualite/qualite-documents'
 import { DirectionResourceAllocationForm } from '@/components/direction/direction-resource-allocation-form'
 import { DirectionPlanValidationForm } from '@/components/direction/direction-plan-validation-form'
 import { Button } from '@/components/ui/button'
@@ -157,11 +158,22 @@ export default function Home() {
               >
                 Risk Assessment
               </button>
+              <button
+                onClick={() => setActiveView('documents')}
+                className={`px-4 py-2 font-medium border-b-2 whitespace-nowrap ${
+                  activeView === 'documents'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground'
+                }`}
+              >
+                Documents
+              </button>
             </div>
             {activeView === 'dashboard' && <QualiteDashboard />}
             {activeView === 'rca' && <QualiteRcaForm />}
             {activeView === 'action-plan' && <QualiteActionPlanForm />}
             {activeView === 'risk' && <QualiteRiskAssessmentForm />}
+            {activeView === 'documents' && <QualiteDocuments />}
           </div>
         )}
 

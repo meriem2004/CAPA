@@ -106,17 +106,22 @@ public class CapaDocumentWorker implements JobHandler {
 
             LOG.info("Document saved successfully with ID: {}", savedDoc.getId());
 
-            // Complete the job with document metadata
+            // Complete the job with document metadata (avoid nulls in variables)
+            Map<String, Object> completionVars = new java.util.HashMap<>();
+            completionVars.put("documentId", savedDoc.getId());
+            completionVars.put("documentFileName", filename);
+            completionVars.put("s3Bucket", bucketName);
+            completionVars.put("s3Key", objectKey);
+            if (resp.etag() != null) {
+                completionVars.put("eTag", resp.etag());
+            }
+            if (resp.versionId() != null) {
+                completionVars.put("s3VersionId", resp.versionId());
+            }
+            completionVars.put("documentGeneratedAt", LocalDateTime.now().toString());
+
             client.newCompleteCommand(job.getKey())
-                    .variables(Map.of(
-                            "documentId", savedDoc.getId(),
-                            "documentFileName", filename,
-                            "s3Bucket", bucketName,
-                            "s3Key", objectKey,
-                            "eTag", resp.etag(),
-                            "s3VersionId", resp.versionId(),
-                            "documentGeneratedAt", LocalDateTime.now().toString()
-                    ))
+                    .variables(completionVars)
                     .send()
                     .join();
         } catch (Exception e) {

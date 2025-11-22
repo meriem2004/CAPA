@@ -6,9 +6,13 @@ import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
+import io.minio.GetObjectArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.http.Method;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 @Service
 public class MinioStorageService {
@@ -43,6 +47,34 @@ public class MinioStorageService {
             }
         } catch (MinioException e) {
             throw new RuntimeException("MinIO upload failed: " + e.getMessage(), e);
+        }
+    }
+
+    public InputStream download(String bucket, String objectName) throws Exception {
+        try {
+            return minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(objectName)
+                            .build()
+            );
+        } catch (MinioException e) {
+            throw new RuntimeException("MinIO download failed: " + e.getMessage(), e);
+        }
+    }
+
+    public String getPresignedUrl(String bucket, String objectName, int expirySeconds) throws Exception {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(bucket)
+                            .object(objectName)
+                            .expiry(expirySeconds)
+                            .build()
+            );
+        } catch (MinioException e) {
+            throw new RuntimeException("MinIO presigned URL failed: " + e.getMessage(), e);
         }
     }
 }
