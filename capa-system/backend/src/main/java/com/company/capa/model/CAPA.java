@@ -8,7 +8,8 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "capa")
-@Getter @Setter
+@Getter
+@Setter
 public class CAPA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,7 @@ package com.company.capa.worker;
 
 import com.company.capa.model.Document;
 import com.company.capa.repository.DocumentRepository;
-import com.company.capa.service.CapaDocumentService;
+import com.company.capa.service.CapaDocumentPdfService;
 import com.company.capa.service.MinioStorageService;
 import io.camunda.client.CamundaClient;
 import io.camunda.client.api.response.ActivatedJob;
@@ -28,7 +28,7 @@ public class CapaDocumentWorker implements JobHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CapaDocumentWorker.class);
 
     private final CamundaClient camundaClient;
-    private final CapaDocumentService documentService;
+    private final CapaDocumentPdfService documentService;
     private final DocumentRepository documentRepository;
     private final MinioStorageService storageService;
     private JobWorker worker;
@@ -37,7 +37,7 @@ public class CapaDocumentWorker implements JobHandler {
     private String bucketName;
 
     public CapaDocumentWorker(CamundaClient camundaClient,
-                              CapaDocumentService documentService,
+                              CapaDocumentPdfService documentService,
                               DocumentRepository documentRepository,
                               MinioStorageService storageService) {
         this.camundaClient = camundaClient;
@@ -48,11 +48,13 @@ public class CapaDocumentWorker implements JobHandler {
 
     @PostConstruct
     public void start() {
+        LOG.info("Starting CapaDocumentWorker - PDF Generation Version");
         worker = camundaClient.newWorker()
                 .jobType("generate-capa-document")
                 .handler(this)
                 .name("capa-document-worker")
                 .open();
+        LOG.info("CapaDocumentWorker started successfully and listening for jobs");
     }
 
     @PreDestroy
@@ -69,10 +71,12 @@ public class CapaDocumentWorker implements JobHandler {
 
     @Override
     public void handle(final JobClient client, final ActivatedJob job) {
-        LOG.info("Generating CAPA document for process instance: {}", job.getProcessInstanceKey());
+        LOG.info("=== WORKER ACTIVATED === Generating CAPA PDF document for process instance: {}", job.getProcessInstanceKey());
         try {
             Map<String, Object> variables = job.getVariablesAsMap();
 
+            // Generate PDF document
+            LOG.info("Calling PDF service to generate document...");
             byte[] docBytes = documentService.generateCapaDocument(variables);
 
             // Create filename
@@ -103,7 +107,7 @@ public class CapaDocumentWorker implements JobHandler {
             document.setS3VersionId(resp.versionId());
             Document savedDoc = documentRepository.save(document);
 
-            LOG.info("Document saved successfully with ID: {}", savedDoc.getId());
+            LOG.info("PDF Document saved successfully with ID: {} and filename: {}", savedDoc.getId(), filename);
 
             // Complete the job with document metadata (avoid nulls in variables)
             Map<String, Object> completionVars = new java.util.HashMap<>();

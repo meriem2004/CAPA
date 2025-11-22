@@ -5,6 +5,10 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import ReactQueryProvider from '@/components/ReactQueryProvider'
 
+// Configure Geist fonts
+const geistSans = GeistSans
+const geistMono = GeistMono
+
 export const metadata: Metadata = {
   title: 'CAPA Management System',
   description: 'Corrective and Preventive Actions management platform',
@@ -34,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${GeistSans.className} ${GeistMono.className}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className={`font-sans antialiased`}>
         {/* React Query Provider */}
          <ReactQueryProvider>
