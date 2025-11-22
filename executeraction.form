@@ -1,401 +1,347 @@
 {
   "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.4.0",
+  "executionPlatformVersion": "8.8.0",
   "exporter": {
     "name": "Camunda Web Modeler",
-    "version": "9d4d45f"
+    "version": "7b5e780"
   },
   "schemaVersion": 19,
-  "id": "form_execute",
+  "id": "form_generate_document",
   "components": [
     {
-      "label": "📄 Document CAPA généré",
-      "components": [
+      "text": "## 📄 Génération du document CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header0",
+        "columns": null
+      },
+      "id": "Text_Header"
+    },
+    {
+      "text": "Le système va générer automatiquement un document Word récapitulatif de cette CAPA incluant toutes les informations collectées jusqu'à présent.",
+      "type": "text",
+      "layout": {
+        "row": "Row_Info",
+        "columns": null
+      },
+      "id": "Text_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep1",
+        "columns": null
+      },
+      "id": "Text_Sep1"
+    },
+    {
+      "text": "## 📋 Informations CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_CAPA_Header"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}\n\n**Titre:** {{capaTitle}}\n\n**Département:** {{department}}\n\n**Priorité:** {{priority}}\n\n**Catégorie:** {{capaCategory}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_CAPA_Info",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep2",
+        "columns": null
+      },
+      "id": "Text_Sep2"
+    },
+    {
+      "text": "## 🔍 Récapitulatif de l'analyse",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Analysis_Header"
+    },
+    {
+      "text": "**Méthode d'analyse:** {{rcaMethod}}\n\n**Causes racines:**\n{{rootCauses}}\n\n**Facteurs contributifs:**\n{{contributingFactors}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Analysis_Details",
+        "columns": null
+      },
+      "id": "Text_Analysis_Details"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep3",
+        "columns": null
+      },
+      "id": "Text_Sep3"
+    },
+    {
+      "text": "## 📝 Plan d'actions approuvé",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Plan_Header"
+    },
+    {
+      "text": "### Action 1\n\n**Type:** {{action1Type}}\n\n**Description:** {{action1Description}}\n\n**Responsable:** {{confirmedOwner1}}\n\n**Date limite:** {{action1Deadline}}\n\n**Budget alloué:** {{allocatedBudget1}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Summary",
+        "columns": null
+      },
+      "id": "Text_Action1_Summary"
+    },
+    {
+      "text": "### Action 2\n\n**Type:** {{action2Type}}\n\n**Description:** {{action2Description}}\n\n**Responsable:** {{confirmedOwner2}}\n\n**Date limite:** {{action2Deadline}}\n\n**Budget alloué:** {{allocatedBudget2}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Summary",
+        "columns": null
+      },
+      "id": "Text_Action2_Summary",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "### Action 3\n\n**Type:** {{action3Type}}\n\n**Description:** {{action3Description}}\n\n**Responsable:** {{confirmedOwner3}}\n\n**Date limite:** {{action3Deadline}}\n\n**Budget alloué:** {{allocatedBudget3}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Summary",
+        "columns": null
+      },
+      "id": "Text_Action3_Summary",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Budget total alloué:** {{totalAllocatedBudget}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Budget_Total",
+        "columns": null
+      },
+      "id": "Text_Budget_Total"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep4",
+        "columns": null
+      },
+      "id": "Text_Sep4"
+    },
+    {
+      "text": "## ⚠️ Évaluation des risques",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header4",
+        "columns": null
+      },
+      "id": "Text_Risk_Header"
+    },
+    {
+      "text": "**Niveau de risque global:** {{globalRiskLevel}}\n\n**Risques résiduels:** {{residualRisks}}\n\n**Recommandations:** {{riskRecommendations}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Risk_Summary",
+        "columns": null
+      },
+      "id": "Text_Risk_Summary"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep5",
+        "columns": null
+      },
+      "id": "Text_Sep5"
+    },
+    {
+      "text": "## ✅ Options de génération",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header5",
+        "columns": null
+      },
+      "id": "Text_Options_Header"
+    },
+    {
+      "label": "Format du document",
+      "values": [
         {
-          "type": "textfield",
-          "id": "displayFileName",
-          "label": "📁 Nom du fichier",
-          "key": "pdfFileName",
-          "disabled": true,
-          "layout": {
-            "row": "Row_filename"
-          }
+          "label": "📄 Document Word complet (.docx)",
+          "value": "docx_full"
         },
         {
-          "type": "textfield",
-          "id": "displayGeneratedDate",
-          "label": "📅 Date de génération",
-          "key": "documentGeneratedAt",
-          "disabled": true,
-          "layout": {
-            "row": "Row_date"
-          }
+          "label": "📄 Document Word résumé (.docx)",
+          "value": "docx_summary"
         },
         {
-          "type": "textfield",
-          "id": "displayBucket",
-          "label": "🗂️ Bucket MinIO",
-          "key": "s3Bucket",
-          "disabled": true,
-          "layout": {
-            "row": "Row_bucket"
-          }
+          "label": "📑 PDF complet (.pdf)",
+          "value": "pdf_full"
         },
         {
-          "type": "textfield",
-          "id": "displayPath",
-          "label": "📍 Chemin du fichier",
-          "key": "pdfS3Key",
-          "disabled": true,
-          "layout": {
-            "row": "Row_path"
-          }
-        },
-        {
-          "type": "text",
-          "id": "docUrl",
-          "label": "🔗 Lien direct vers le document",
-          "key": "documentUrl",
-          "defaultValue": "={{\"http://localhost:9000/\" + s3Bucket + \"/\" + pdfS3Key}}",
-          "description": "Copiez ce lien ou cliquez pour ouvrir",
-          "layout": {
-            "row": "Row_url"
-          }
-        },
-        {
-          "type": "html",
-          "id": "actionButtons",
-          "html": "<div style='margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap;'>\n  <a href='http://localhost:9000/capadocuments/documents/' target='_blank' style='display: inline-block; background: #0d6efd; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;'>👁️ Ouvrir le dossier documents</a>\n  <a href='http://localhost:9001/browser/capadocuments/documents/' target='_blank' style='display: inline-block; background: #6f42c1; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;'>🗄️ MinIO Console</a>\n</div>\n<div style='background: #d1ecf1; border-left: 4px solid #0dcaf0; padding: 12px; margin-top: 15px; border-radius: 4px;'>\n  <strong style='color: #055160;'>💡 Comment accéder au document :</strong>\n  <ol style='margin: 10px 0 0 20px; color: #055160;'>\n    <li>Copiez le lien direct ci-dessus</li>\n    <li>Collez-le dans un nouvel onglet de votre navigateur</li>\n    <li>Ou cliquez sur \"Ouvrir le dossier documents\" et trouvez votre fichier</li>\n  </ol>\n</div>",
-          "layout": {
-            "row": "Row_buttons"
-          }
+          "label": "📑 PDF résumé (.pdf)",
+          "value": "pdf_summary"
         }
       ],
-      "showOutline": true,
-      "type": "group",
-      "id": "documentSection",
-      "path": "documentSection",
+      "type": "select",
       "layout": {
-        "row": "Row_0lrhglz"
-      }
+        "row": "Row_Format",
+        "columns": null
+      },
+      "id": "Field_Document_Format",
+      "key": "documentFormat",
+      "defaultValue": "docx_full",
+      "validate": {
+        "required": true
+      },
+      "searchable": true,
+      "description": "Choisissez le format et le niveau de détail du document"
     },
     {
-      "type": "separator",
-      "id": "Field_1wk9ewu",
+      "label": "Inclure les annexes",
+      "type": "checkbox",
       "layout": {
-        "row": "Row_1o7z604"
-      }
+        "row": "Row_Annexes",
+        "columns": null
+      },
+      "id": "Field_Include_Annexes",
+      "key": "includeAnnexes",
+      "defaultValue": true,
+      "description": "Inclure les diagrammes d'analyse, évaluation des risques détaillée, etc."
     },
     {
-      "label": "✅ Étapes d'exécution",
-      "components": [
+      "label": "Inclure l'historique des modifications",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_History",
+        "columns": null
+      },
+      "id": "Field_Include_History",
+      "key": "includeHistory",
+      "defaultValue": false,
+      "description": "Inclure l'historique complet des validations et rejets"
+    },
+    {
+      "label": "Langue du document",
+      "values": [
         {
-          "label": "Cochez les étapes complétées",
-          "values": [
-            {
-              "label": "Préparation des ressources nécessaires",
-              "value": "step1"
-            },
-            {
-              "label": "Mise en œuvre de l'action corrective/préventive",
-              "value": "step2"
-            },
-            {
-              "label": "Vérification de la mise en œuvre",
-              "value": "step3"
-            },
-            {
-              "label": "Documentation des preuves d'exécution",
-              "value": "step4"
-            },
-            {
-              "label": "Communication aux parties prenantes",
-              "value": "step5"
-            }
-          ],
-          "type": "checklist",
-          "id": "stepsList",
-          "key": "completedSteps",
-          "validate": {
-            "required": true
-          },
-          "layout": {
-            "row": "Row_03z4i36"
-          }
+          "label": "🇫🇷 Français",
+          "value": "fr"
         },
         {
-          "label": "Pourcentage d'avancement global (%)",
-          "type": "number",
-          "id": "progressPercentage",
-          "key": "progressPercentage",
-          "validate": {
-            "required": true,
-            "min": 0,
-            "max": 100
-          },
-          "defaultValue": 0,
-          "increment": 10,
-          "layout": {
-            "row": "Row_18uqrqd"
-          }
+          "label": "🇬🇧 English",
+          "value": "en"
+        },
+        {
+          "label": "🇪🇸 Español",
+          "value": "es"
+        },
+        {
+          "label": "🇩🇪 Deutsch",
+          "value": "de"
         }
       ],
-      "showOutline": true,
-      "type": "group",
-      "id": "executionSteps",
-      "path": "executionSteps",
+      "type": "select",
       "layout": {
-        "row": "Row_0g96v4r"
-      }
+        "row": "Row_Language",
+        "columns": null
+      },
+      "id": "Field_Language",
+      "key": "documentLanguage",
+      "defaultValue": "fr",
+      "searchable": true
     },
     {
-      "type": "separator",
-      "id": "Field_1r1arsg",
+      "label": "Nom du fichier (optionnel)",
+      "type": "textfield",
       "layout": {
-        "row": "Row_1xha60c"
-      }
+        "row": "Row_Filename",
+        "columns": null
+      },
+      "id": "Field_Filename",
+      "key": "customFilename",
+      "description": "Laissez vide pour utiliser le nom par défaut: CAPA_{numéro}_{date}",
+      "placeholder": "Ex: CAPA_Qualite_Nov2025"
     },
     {
-      "label": "📎 Preuves d'exécution",
-      "components": [
-        {
-          "label": "Description détaillée de l'exécution",
-          "type": "textarea",
-          "id": "executionDescription",
-          "key": "executionDescription",
-          "validate": {
-            "required": true,
-            "minLength": 50
-          },
-          "rows": 4,
-          "description": "Décrivez comment l'action a été exécutée (minimum 50 caractères)",
-          "layout": {
-            "row": "Row_1ixnzyp"
-          }
-        },
-        {
-          "type": "html",
-          "id": "minioUploadInstructions",
-          "html": "<div style='background: #e7f3ff; border-left: 4px solid #0d6efd; padding: 15px; margin: 15px 0; border-radius: 4px;'>\n  <strong style='color: #0d6efd;'>💡 Instructions pour uploader des preuves :</strong>\n  <ol style='margin: 8px 0 0 20px; color: #084298; line-height: 1.6;'>\n    <li>Ouvrez <a href='http://localhost:9001' target='_blank' style='color: #0d6efd; font-weight: 600;'>MinIO Console</a></li>\n    <li>Login : <code style='background: rgba(0,0,0,0.05); padding: 2px 6px;'>minioadmin / minioadmin123</code></li>\n    <li>Naviguez : <strong>Buckets</strong> → <strong>capadocuments</strong></li>\n    <li>Créez le dossier selon votre CAPA (ex: CAPA-xxx/evidence/)</li>\n    <li>Uploadez vos fichiers de preuve</li>\n    <li>Listez les noms ci-dessous</li>\n  </ol>\n</div>",
-          "layout": {
-            "row": "Row_minioInstructions"
-          }
-        },
-        {
-          "label": "Liste des fichiers de preuve uploadés",
-          "type": "textarea",
-          "id": "evidenceFiles",
-          "key": "evidenceFilesList",
-          "rows": 3,
-          "description": "Un fichier par ligne",
-          "placeholder": "photo_avant.jpg\nphoto_apres.jpg\nrapport_verification.pdf",
-          "layout": {
-            "row": "Row_0f2jjq0"
-          }
-        },
-        {
-          "label": "Chemin MinIO des preuves",
-          "type": "textfield",
-          "id": "minioPathEvidence",
-          "key": "minioEvidencePath",
-          "defaultValue": "={{s3Bucket + \"/\" + capaNumber + \"/evidence/\"}}",
-          "disabled": true,
-          "layout": {
-            "row": "Row_1wfbs01"
-          }
-        },
-        {
-          "label": "✅ J'ai uploadé au moins un fichier de preuve",
-          "type": "checkbox",
-          "id": "evidenceUploaded",
-          "key": "evidenceUploaded",
-          "validate": {
-            "required": true
-          },
-          "layout": {
-            "row": "Row_02obof4"
-          }
-        }
-      ],
-      "showOutline": true,
-      "type": "group",
-      "id": "evidenceGroup",
-      "path": "evidence",
+      "label": "Commentaires additionnels à inclure",
+      "type": "textarea",
       "layout": {
-        "row": "Row_1yi4q5z"
-      }
+        "row": "Row_Comments",
+        "columns": null
+      },
+      "id": "Field_Additional_Comments",
+      "key": "additionalComments",
+      "description": "Ces commentaires seront ajoutés dans une section dédiée du document",
+      "rows": 3
     },
     {
-      "type": "separator",
-      "id": "Field_1sfc7hb",
+      "text": "---",
+      "type": "text",
       "layout": {
-        "row": "Row_1xev9yv"
-      }
+        "row": "Row_Sep6",
+        "columns": null
+      },
+      "id": "Text_Sep6"
     },
     {
-      "label": "⚠️ Obstacles et solutions",
-      "components": [
-        {
-          "label": "Des obstacles ont-ils été rencontrés ?",
-          "values": [
-            {
-              "label": "Oui",
-              "value": "yes"
-            },
-            {
-              "label": "Non",
-              "value": "no"
-            }
-          ],
-          "type": "radio",
-          "id": "hasObstacles",
-          "key": "hasObstacles",
-          "validate": {
-            "required": true
-          },
-          "defaultValue": "no",
-          "layout": {
-            "row": "Row_06qjf5r"
-          }
-        },
-        {
-          "label": "Description des obstacles",
-          "type": "textarea",
-          "id": "obstaclesDescription",
-          "key": "obstaclesDescription",
-          "rows": 3,
-          "conditional": {
-            "hide": "=hasObstacles != \"yes\""
-          },
-          "validate": {
-            "required": "=hasObstacles = \"yes\""
-          },
-          "layout": {
-            "row": "Row_1n7p91m"
-          }
-        },
-        {
-          "label": "Solutions apportées",
-          "type": "textarea",
-          "id": "solutionsApplied",
-          "key": "solutionsApplied",
-          "rows": 3,
-          "conditional": {
-            "hide": "=hasObstacles != \"yes\""
-          },
-          "validate": {
-            "required": "=hasObstacles = \"yes\""
-          },
-          "layout": {
-            "row": "Row_0ph4lbv"
-          }
-        }
-      ],
-      "showOutline": true,
-      "type": "group",
-      "id": "issuesGroup",
-      "path": "issues",
+      "text": "## 📌 Information importante",
+      "type": "text",
       "layout": {
-        "row": "Row_1bkirq2"
-      }
+        "row": "Row_Header6",
+        "columns": null
+      },
+      "id": "Text_Important_Header"
     },
     {
-      "type": "separator",
-      "id": "Field_1ey48f9",
+      "text": "ℹ️ Le document sera généré automatiquement et sera disponible pour téléchargement. Une copie sera également archivée dans le système pour traçabilité.\n\n⏱️ Temps estimé de génération: 10-30 secondes selon la complexité de la CAPA.\n\n📧 Une notification sera envoyée une fois le document généré.",
+      "type": "text",
       "layout": {
-        "row": "Row_0kgmh93"
-      }
+        "row": "Row_Important_Info",
+        "columns": null
+      },
+      "id": "Text_Important_Info"
     },
     {
-      "label": "📅 Dates",
-      "components": [
-        {
-          "subtype": "datetime",
-          "type": "datetime",
-          "id": "actualExecutionDate",
-          "label": "Date d'exécution réelle",
-          "key": "actualExecutionDate",
-          "validate": {
-            "required": true
-          },
-          "dateLabel": "Date",
-          "timeLabel": "Heure",
-          "timeSerializingFormat": "utc_offset",
-          "timeInterval": 15,
-          "layout": {
-            "row": "Row_0m9uuwm"
-          }
-        },
-        {
-          "subtype": "date",
-          "type": "datetime",
-          "id": "plannedDeadline",
-          "label": "Date limite prévue",
-          "key": "targetResolutionDate",
-          "disabled": true,
-          "layout": {
-            "row": "Row_0dk695u"
-          }
-        }
-      ],
-      "showOutline": true,
-      "type": "group",
-      "id": "datesGroup",
-      "path": "dates",
+      "text": "---",
+      "type": "text",
       "layout": {
-        "row": "Row_179occ5"
-      }
+        "row": "Row_Sep7",
+        "columns": null
+      },
+      "id": "Text_Sep7"
     },
     {
-      "type": "separator",
-      "id": "Field_0f10dfl",
-      "layout": {
-        "row": "Row_03we8oa"
-      }
-    },
-    {
-      "label": "✓ Validation",
-      "components": [
-        {
-          "label": "Je confirme que l'action a été exécutée conformément au plan",
-          "type": "checkbox",
-          "id": "confirmCompletion",
-          "key": "confirmCompletion",
-          "validate": {
-            "required": true
-          },
-          "layout": {
-            "row": "Row_0xlluyi"
-          }
-        },
-        {
-          "label": "Commentaires additionnels",
-          "type": "textarea",
-          "id": "additionalComments",
-          "key": "additionalComments",
-          "rows": 2,
-          "layout": {
-            "row": "Row_06nqv4m"
-          }
-        }
-      ],
-      "showOutline": true,
-      "type": "group",
-      "id": "validationGroup",
-      "path": "validation",
-      "layout": {
-        "row": "Row_0rdtcv7"
-      }
-    },
-    {
-      "label": "✅ Valider l'exécution",
+      "label": "Générer le document",
       "action": "submit",
       "type": "button",
-      "id": "submitExecution",
-      "key": "submit",
       "layout": {
-        "row": "Row_1lfg66y"
-      }
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
     }
   ],
   "type": "default"

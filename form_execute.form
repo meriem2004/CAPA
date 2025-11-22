@@ -1,0 +1,855 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "7b5e780"
+  },
+  "schemaVersion": 19,
+  "id": "form_execute",
+  "components": [
+    {
+      "text": "## 🎯 Exécution des actions CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header0",
+        "columns": null
+      },
+      "id": "Text_Header"
+    },
+    {
+      "text": "Cette étape permet de suivre et documenter l'exécution des actions correctrices et préventives approuvées.",
+      "type": "text",
+      "layout": {
+        "row": "Row_Info",
+        "columns": null
+      },
+      "id": "Text_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep1",
+        "columns": null
+      },
+      "id": "Text_Sep1"
+    },
+    {
+      "text": "## 📋 Informations CAPA",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header1",
+        "columns": null
+      },
+      "id": "Text_CAPA_Header"
+    },
+    {
+      "text": "**Numéro CAPA:** {{capaNumber}}\n\n**Titre:** {{capaTitle}}\n\n**Département:** {{department}}\n\n**Priorité:** {{priority}}\n\n**Budget total:** {{totalAllocatedBudget}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_CAPA_Info",
+        "columns": null
+      },
+      "id": "Text_CAPA_Info"
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep2",
+        "columns": null
+      },
+      "id": "Text_Sep2"
+    },
+    {
+      "text": "## ⚙️ Exécution Action 1",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header2",
+        "columns": null
+      },
+      "id": "Text_Action1_Header"
+    },
+    {
+      "text": "**Type:** {{action1Type}}\n\n**Description:** {{action1Description}}\n\n**Responsable:** {{confirmedOwner1}}\n\n**Date limite:** {{action1Deadline}}\n\n**Budget alloué:** {{allocatedBudget1}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action1_Info",
+        "columns": null
+      },
+      "id": "Text_Action1_Info"
+    },
+    {
+      "label": "Statut d'exécution Action 1",
+      "values": [
+        {
+          "label": "🔵 Non démarrée",
+          "value": "not_started"
+        },
+        {
+          "label": "🟡 En cours",
+          "value": "in_progress"
+        },
+        {
+          "label": "🟢 Terminée",
+          "value": "completed"
+        },
+        {
+          "label": "🔴 Bloquée",
+          "value": "blocked"
+        },
+        {
+          "label": "⚪ Annulée",
+          "value": "cancelled"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action1_Status",
+        "columns": null
+      },
+      "id": "Field_Action1_Status",
+      "key": "action1Status",
+      "validate": {
+        "required": true
+      },
+      "searchable": true,
+      "defaultValue": "in_progress"
+    },
+    {
+      "label": "Pourcentage d'avancement (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_Action1_Progress",
+        "columns": null
+      },
+      "id": "Field_Action1_Progress",
+      "key": "action1Progress",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 100
+      },
+      "description": "Indiquez le pourcentage de complétion (0-100%)",
+      "defaultValue": 0
+    },
+    {
+      "label": "Date de début réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action1_StartDate",
+        "columns": null
+      },
+      "id": "Field_Action1_StartDate",
+      "key": "action1StartDate",
+      "validate": {
+        "required": true
+      },
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "label": "Date de fin réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action1_EndDate",
+        "columns": null
+      },
+      "id": "Field_Action1_EndDate",
+      "key": "action1EndDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15,
+      "description": "À remplir uniquement si l'action est terminée",
+      "conditional": {
+        "hide": "=action1Status != \"completed\""
+      }
+    },
+    {
+      "label": "Détails de l'exécution",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Details",
+        "columns": null
+      },
+      "id": "Field_Action1_Details",
+      "key": "action1ExecutionDetails",
+      "validate": {
+        "required": true,
+        "minLength": 20
+      },
+      "description": "Décrivez les étapes réalisées, les méthodes utilisées, les résultats obtenus",
+      "rows": 5
+    },
+    {
+      "label": "Budget consommé",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action1_BudgetSpent",
+        "columns": null
+      },
+      "id": "Field_Action1_BudgetSpent",
+      "key": "action1BudgetSpent",
+      "description": "Montant réellement dépensé pour cette action",
+      "placeholder": "Ex: 2500 EUR"
+    },
+    {
+      "label": "Personnes impliquées",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Team",
+        "columns": null
+      },
+      "id": "Field_Action1_Team",
+      "key": "action1TeamInvolved",
+      "description": "Liste des personnes ayant participé à l'exécution",
+      "rows": 2
+    },
+    {
+      "label": "Difficultés rencontrées",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Issues",
+        "columns": null
+      },
+      "id": "Field_Action1_Issues",
+      "key": "action1Issues",
+      "description": "Obstacles, problèmes ou imprévus rencontrés",
+      "rows": 3
+    },
+    {
+      "label": "Preuves et documents",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_Evidence",
+        "columns": null
+      },
+      "id": "Field_Action1_Evidence",
+      "key": "action1Evidence",
+      "description": "Références aux documents, photos, rapports de tests, etc.",
+      "rows": 2
+    },
+    {
+      "label": "Raison du blocage",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action1_BlockReason",
+        "columns": null
+      },
+      "id": "Field_Action1_BlockReason",
+      "key": "action1BlockReason",
+      "validate": {
+        "required": true,
+        "minLength": 10
+      },
+      "description": "Expliquez pourquoi l'action est bloquée et les mesures nécessaires",
+      "rows": 4,
+      "conditional": {
+        "hide": "=action1Status != \"blocked\""
+      }
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep3",
+        "columns": null
+      },
+      "id": "Text_Sep3"
+    },
+    {
+      "text": "## ⚙️ Exécution Action 2",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header3",
+        "columns": null
+      },
+      "id": "Text_Action2_Header",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action2Type}}\n\n**Description:** {{action2Description}}\n\n**Responsable:** {{confirmedOwner2}}\n\n**Date limite:** {{action2Deadline}}\n\n**Budget alloué:** {{allocatedBudget2}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action2_Info",
+        "columns": null
+      },
+      "id": "Text_Action2_Info",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Statut d'exécution Action 2",
+      "values": [
+        {
+          "label": "🔵 Non démarrée",
+          "value": "not_started"
+        },
+        {
+          "label": "🟡 En cours",
+          "value": "in_progress"
+        },
+        {
+          "label": "🟢 Terminée",
+          "value": "completed"
+        },
+        {
+          "label": "🔴 Bloquée",
+          "value": "blocked"
+        },
+        {
+          "label": "⚪ Annulée",
+          "value": "cancelled"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action2_Status",
+        "columns": null
+      },
+      "id": "Field_Action2_Status",
+      "key": "action2Status",
+      "searchable": true,
+      "defaultValue": "in_progress",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Pourcentage d'avancement (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_Action2_Progress",
+        "columns": null
+      },
+      "id": "Field_Action2_Progress",
+      "key": "action2Progress",
+      "validate": {
+        "min": 0,
+        "max": 100
+      },
+      "description": "Indiquez le pourcentage de complétion (0-100%)",
+      "defaultValue": 0,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Date de début réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action2_StartDate",
+        "columns": null
+      },
+      "id": "Field_Action2_StartDate",
+      "key": "action2StartDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Date de fin réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action2_EndDate",
+        "columns": null
+      },
+      "id": "Field_Action2_EndDate",
+      "key": "action2EndDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15,
+      "description": "À remplir uniquement si l'action est terminée",
+      "conditional": {
+        "hide": "=(action2Description = null or action2Description = \"\") or action2Status != \"completed\""
+      }
+    },
+    {
+      "label": "Détails de l'exécution",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_Details",
+        "columns": null
+      },
+      "id": "Field_Action2_Details",
+      "key": "action2ExecutionDetails",
+      "description": "Décrivez les étapes réalisées, les méthodes utilisées, les résultats obtenus",
+      "rows": 5,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Budget consommé",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action2_BudgetSpent",
+        "columns": null
+      },
+      "id": "Field_Action2_BudgetSpent",
+      "key": "action2BudgetSpent",
+      "description": "Montant réellement dépensé pour cette action",
+      "placeholder": "Ex: 2500 EUR",
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Difficultés rencontrées",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_Issues",
+        "columns": null
+      },
+      "id": "Field_Action2_Issues",
+      "key": "action2Issues",
+      "description": "Obstacles, problèmes ou imprévus rencontrés",
+      "rows": 3,
+      "conditional": {
+        "hide": "=action2Description = null or action2Description = \"\""
+      }
+    },
+    {
+      "label": "Raison du blocage",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action2_BlockReason",
+        "columns": null
+      },
+      "id": "Field_Action2_BlockReason",
+      "key": "action2BlockReason",
+      "description": "Expliquez pourquoi l'action est bloquée et les mesures nécessaires",
+      "rows": 4,
+      "conditional": {
+        "hide": "=(action2Description = null or action2Description = \"\") or action2Status != \"blocked\""
+      }
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep4",
+        "columns": null
+      },
+      "id": "Text_Sep4"
+    },
+    {
+      "text": "## ⚙️ Exécution Action 3",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header4",
+        "columns": null
+      },
+      "id": "Text_Action3_Header",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "text": "**Type:** {{action3Type}}\n\n**Description:** {{action3Description}}\n\n**Responsable:** {{confirmedOwner3}}\n\n**Date limite:** {{action3Deadline}}\n\n**Budget alloué:** {{allocatedBudget3}}",
+      "type": "text",
+      "layout": {
+        "row": "Row_Action3_Info",
+        "columns": null
+      },
+      "id": "Text_Action3_Info",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Statut d'exécution Action 3",
+      "values": [
+        {
+          "label": "🔵 Non démarrée",
+          "value": "not_started"
+        },
+        {
+          "label": "🟡 En cours",
+          "value": "in_progress"
+        },
+        {
+          "label": "🟢 Terminée",
+          "value": "completed"
+        },
+        {
+          "label": "🔴 Bloquée",
+          "value": "blocked"
+        },
+        {
+          "label": "⚪ Annulée",
+          "value": "cancelled"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Action3_Status",
+        "columns": null
+      },
+      "id": "Field_Action3_Status",
+      "key": "action3Status",
+      "searchable": true,
+      "defaultValue": "in_progress",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Pourcentage d'avancement (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_Action3_Progress",
+        "columns": null
+      },
+      "id": "Field_Action3_Progress",
+      "key": "action3Progress",
+      "validate": {
+        "min": 0,
+        "max": 100
+      },
+      "description": "Indiquez le pourcentage de complétion (0-100%)",
+      "defaultValue": 0,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Date de début réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action3_StartDate",
+        "columns": null
+      },
+      "id": "Field_Action3_StartDate",
+      "key": "action3StartDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Date de fin réelle",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_Action3_EndDate",
+        "columns": null
+      },
+      "id": "Field_Action3_EndDate",
+      "key": "action3EndDate",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15,
+      "description": "À remplir uniquement si l'action est terminée",
+      "conditional": {
+        "hide": "=(action3Description = null or action3Description = \"\") or action3Status != \"completed\""
+      }
+    },
+    {
+      "label": "Détails de l'exécution",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_Details",
+        "columns": null
+      },
+      "id": "Field_Action3_Details",
+      "key": "action3ExecutionDetails",
+      "description": "Décrivez les étapes réalisées, les méthodes utilisées, les résultats obtenus",
+      "rows": 5,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Budget consommé",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Action3_BudgetSpent",
+        "columns": null
+      },
+      "id": "Field_Action3_BudgetSpent",
+      "key": "action3BudgetSpent",
+      "description": "Montant réellement dépensé pour cette action",
+      "placeholder": "Ex: 2500 EUR",
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Difficultés rencontrées",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_Issues",
+        "columns": null
+      },
+      "id": "Field_Action3_Issues",
+      "key": "action3Issues",
+      "description": "Obstacles, problèmes ou imprévus rencontrés",
+      "rows": 3,
+      "conditional": {
+        "hide": "=action3Description = null or action3Description = \"\""
+      }
+    },
+    {
+      "label": "Raison du blocage",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Action3_BlockReason",
+        "columns": null
+      },
+      "id": "Field_Action3_BlockReason",
+      "key": "action3BlockReason",
+      "description": "Expliquez pourquoi l'action est bloquée et les mesures nécessaires",
+      "rows": 4,
+      "conditional": {
+        "hide": "=(action3Description = null or action3Description = \"\") or action3Status != \"blocked\""
+      }
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep5",
+        "columns": null
+      },
+      "id": "Text_Sep5"
+    },
+    {
+      "text": "## 📊 Bilan global de l'exécution",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header5",
+        "columns": null
+      },
+      "id": "Text_Global_Header"
+    },
+    {
+      "label": "Budget total consommé",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_Total_Budget",
+        "columns": null
+      },
+      "id": "Field_Total_Budget_Spent",
+      "key": "totalBudgetSpent",
+      "validate": {
+        "required": true
+      },
+      "description": "Somme des budgets consommés pour toutes les actions",
+      "placeholder": "Ex: 8500 EUR"
+    },
+    {
+      "label": "Écart budgétaire",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Budget_Variance",
+        "columns": null
+      },
+      "id": "Field_Budget_Variance",
+      "key": "budgetVarianceExplanation",
+      "description": "Expliquez les écarts significatifs entre budget prévu et budget consommé",
+      "rows": 3
+    },
+    {
+      "label": "Respect des délais",
+      "values": [
+        {
+          "label": "✅ Toutes les actions dans les délais",
+          "value": "on_time"
+        },
+        {
+          "label": "⚠️ Légers retards (<1 semaine)",
+          "value": "slight_delay"
+        },
+        {
+          "label": "🔴 Retards importants (>1 semaine)",
+          "value": "significant_delay"
+        },
+        {
+          "label": "❌ Échéances dépassées",
+          "value": "overdue"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_Timeline_Status",
+        "columns": null
+      },
+      "id": "Field_Timeline_Status",
+      "key": "timelineStatus",
+      "validate": {
+        "required": true
+      },
+      "searchable": true
+    },
+    {
+      "label": "Justification des retards",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Delay_Justification",
+        "columns": null
+      },
+      "id": "Field_Delay_Justification",
+      "key": "delayJustification",
+      "validate": {
+        "required": true,
+        "minLength": 20
+      },
+      "description": "Expliquez les causes des retards et les actions entreprises",
+      "rows": 4,
+      "conditional": {
+        "hide": "=timelineStatus = \"on_time\""
+      }
+    },
+    {
+      "label": "Taux de complétion global (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_Global_Completion",
+        "columns": null
+      },
+      "id": "Field_Global_Completion",
+      "key": "globalCompletionRate",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 100
+      },
+      "description": "Pourcentage moyen d'avancement de toutes les actions",
+      "defaultValue": 0
+    },
+    {
+      "label": "Résultats observés",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Results",
+        "columns": null
+      },
+      "id": "Field_Results",
+      "key": "observedResults",
+      "validate": {
+        "required": true,
+        "minLength": 50
+      },
+      "description": "Décrivez les résultats concrets obtenus suite à l'exécution des actions",
+      "rows": 5
+    },
+    {
+      "label": "Indicateurs de performance atteints",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_KPIs",
+        "columns": null
+      },
+      "id": "Field_KPIs_Achieved",
+      "key": "kpisAchieved",
+      "description": "Listez les KPIs définis dans le plan et leurs valeurs actuelles",
+      "rows": 4
+    },
+    {
+      "label": "Leçons apprises",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Lessons",
+        "columns": null
+      },
+      "id": "Field_Lessons_Learned",
+      "key": "lessonsLearned",
+      "validate": {
+        "required": true,
+        "minLength": 30
+      },
+      "description": "Retours d'expérience, bonnes pratiques identifiées, points d'amélioration",
+      "rows": 5
+    },
+    {
+      "label": "Actions complémentaires nécessaires",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Additional_Actions",
+        "columns": null
+      },
+      "id": "Field_Additional_Actions",
+      "key": "additionalActionsNeeded",
+      "description": "Y a-t-il des actions supplémentaires à prévoir ?",
+      "rows": 4
+    },
+    {
+      "label": "Commentaires généraux",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Comments",
+        "columns": null
+      },
+      "id": "Field_General_Comments",
+      "key": "generalComments",
+      "description": "Toute autre information pertinente sur l'exécution",
+      "rows": 4
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep6",
+        "columns": null
+      },
+      "id": "Text_Sep6"
+    },
+    {
+      "text": "## 📎 Documents et preuves",
+      "type": "text",
+      "layout": {
+        "row": "Row_Header6",
+        "columns": null
+      },
+      "id": "Text_Documents_Header"
+    },
+    {
+      "label": "Références aux documents",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_Document_References",
+        "columns": null
+      },
+      "id": "Field_Document_References",
+      "key": "documentReferences",
+      "description": "Listez tous les documents, photos, rapports, tests, attestations qui prouvent l'exécution des actions",
+      "rows": 5
+    },
+    {
+      "text": "---",
+      "type": "text",
+      "layout": {
+        "row": "Row_Sep7",
+        "columns": null
+      },
+      "id": "Text_Sep7"
+    },
+    {
+      "label": "Soumettre le rapport d'exécution",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_Submit",
+        "columns": null
+      },
+      "id": "Field_Submit"
+    }
+  ],
+  "type": "default"
+}

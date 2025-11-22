@@ -73,12 +73,11 @@ public class CapaDocumentWorker implements JobHandler {
         try {
             Map<String, Object> variables = job.getVariablesAsMap();
 
-            // Generate Word document
             byte[] docBytes = documentService.generateCapaDocument(variables);
 
             // Create filename
             String capaNumber = variables.getOrDefault("capaNumber", "N/A").toString();
-            String filename = String.format("CAPA_%s_%s.docx",
+            String filename = String.format("CAPA_%s_%s.pdf",
                     capaNumber,
                     LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")));
 
@@ -90,7 +89,7 @@ public class CapaDocumentWorker implements JobHandler {
                     docBytes,
                     bucketName,
                     objectKey,
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    "application/pdf"
             );
 
             // Save metadata to DB
