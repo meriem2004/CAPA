@@ -4,15 +4,19 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ChevronUp } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
+import useCreateCapa from '@/components/declarant/services/hooks/useCreateCapa'
+import type { CreateCapaRequest } from '@/components/declarant/services/api/capa.service'
 
-type Severity = 'low' | 'medium' | 'high' | 'critical'
+export type CapaType = 'corrective' | 'preventive'
+export type Severity = 'minor' | 'major' | 'critical'
 
 export type CapaFormData = {
   title: string
-  description: string
-  department: string
-  eventDate: string
-  severity: Severity
+  description?: string
+  capaType: CapaType
+  severity?: Severity
+  dueDate?: string // ISO date string
 }
 
 export function DeclarantCapaForm({
@@ -26,12 +30,14 @@ export function DeclarantCapaForm({
   const [formData, setFormData] = useState<CapaFormData>({
     title: '',
     description: '',
-    department: '',
-    eventDate: '',
-    severity: 'medium',
+    capaType: 'corrective',
+    severity: 'minor',
+    dueDate: '',
   })
   const [charCount, setCharCount] = useState(0)
   const maxChars = 1000
+  const { toast } = useToast()
+  const createCapa = useCreateCapa()
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value
@@ -42,6 +48,89 @@ export function DeclarantCapaForm({
   }
 
   const progress = (charCount / maxChars) * 100
+
+  const handleSubmit = async () => {
+    if (!formData.title.trim()) {
+      toast({
+        title: 'Validation Error',
+        description: 'Title is required',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    if (!formData.capaType) {
+      toast({
+        title: 'Validation Error',
+        description: 'CAPA Type is required',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    // Prepare payload for API
+    const payload: CreateCapaRequest = {
+      title: formData.title.trim(),
+      capaType: formData.capaType,
+    }
+
+    if (formData.description?.trim()) {
+      payload.description = formData.description.trim()
+    }
+
+    if (formData.severity) {
+      payload.severity = formData.severity
+    }
+
+    if (formData.dueDate) {
+      // Convert date to ISO string format for LocalDateTime (YYYY-MM-DDTHH:mm:ss)
+      // Set to end of day (23:59:59)
+      const date = new Date(formData.dueDate)
+      date.setHours(23, 59, 59, 0)
+      // Format as YYYY-MM-DDTHH:mm:ss (without timezone for LocalDateTime)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      const seconds = String(date.getSeconds()).padStart(2, '0')
+      payload.dueDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+    }
+
+    try {
+      await createCapa.mutateAsync(payload)
+      toast({
+        title: 'Success',
+        description: 'CAPA created successfully',
+      })
+      onSubmit?.(formData)
+      
+      // Reset form
+      setFormData({
+        title: '',
+        description: '',
+        capaType: 'corrective',
+        severity: 'minor',
+        dueDate: '',
+      })
+      setCharCount(0)
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error?.message || 'Failed to create CAPA'
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        variant: 'destructive',
+      })
+    }
+  }
+
+  const handleSaveDraft = () => {
+    onSaveDraft?.(formData)
+    toast({
+      title: 'Draft Saved',
+      description: 'Your CAPA form has been saved as a draft',
+    })
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -80,7 +169,7 @@ export function DeclarantCapaForm({
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-semibold text-foreground mb-2">
-            CAPA Title
+            CAPA Title <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -88,35 +177,34 @@ export function DeclarantCapaForm({
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             placeholder="Brief summary of the issue"
             className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            required
           />
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-foreground mb-2">
-            Department
+            CAPA Type <span className="text-red-500">*</span>
           </label>
           <select
-            value={formData.department}
-            onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+            value={formData.capaType}
+            onChange={(e) => setFormData({ ...formData, capaType: e.target.value as CapaType })}
             className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            required
           >
-            <option value="">Select a department</option>
-            <option value="manufacturing">Manufacturing</option>
-            <option value="quality">Quality</option>
-            <option value="operations">Operations</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="corrective">Corrective</option>
+            <option value="preventive">Preventive</option>
           </select>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-foreground mb-2">
-              Event Date
+              Due Date
             </label>
             <input
               type="date"
-              value={formData.eventDate}
-              onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
+              value={formData.dueDate}
+              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
               className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -129,9 +217,8 @@ export function DeclarantCapaForm({
               onChange={(e) => setFormData({ ...formData, severity: e.target.value as Severity })}
               className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="minor">Minor</option>
+              <option value="major">Major</option>
               <option value="critical">Critical</option>
             </select>
           </div>
@@ -168,15 +255,17 @@ export function DeclarantCapaForm({
           <Button
             variant="outline"
             className="px-6 py-2"
-            onClick={() => onSaveDraft?.(formData)}
+            onClick={handleSaveDraft}
+            disabled={createCapa.isPending}
           >
             Save Draft
           </Button>
           <Button
             className="px-6 py-2 bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={() => onSubmit?.(formData)}
+            onClick={handleSubmit}
+            disabled={createCapa.isPending || !formData.title.trim()}
           >
-            Submit CAPA
+            {createCapa.isPending ? 'Submitting...' : 'Submit CAPA'}
           </Button>
         </div>
       </div>

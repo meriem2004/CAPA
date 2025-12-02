@@ -9,6 +9,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.InputStream;
@@ -26,11 +27,13 @@ public class DocumentController {
     private String defaultBucket;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole({'MANAGER', 'QUALITY'})")
     public List<Document> list() {
         return documentRepository.findAll();
     }
 
     @GetMapping("/{id}/signed-url")
+    @PreAuthorize("hasAnyRole({'MANAGER', 'QUALITY'})")
     public Map<String, String> getSignedUrl(@PathVariable Long id, @RequestParam(defaultValue = "3600") int expirySeconds) throws Exception {
         Document doc = documentRepository.findById(id).orElseThrow();
         String bucket = doc.getS3Bucket() != null && !doc.getS3Bucket().isBlank() ? doc.getS3Bucket() : defaultBucket;
@@ -43,6 +46,7 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}/download")
+    @PreAuthorize("hasAnyRole({'MANAGER', 'QUALITY'})")
     public ResponseEntity<InputStreamResource> download(@PathVariable Long id) throws Exception {
         Document doc = documentRepository.findById(id).orElseThrow();
         String bucket = doc.getS3Bucket() != null && !doc.getS3Bucket().isBlank() ? doc.getS3Bucket() : defaultBucket;

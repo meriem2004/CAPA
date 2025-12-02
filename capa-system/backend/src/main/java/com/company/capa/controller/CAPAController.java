@@ -1,11 +1,10 @@
 package com.company.capa.controller;
 
 import com.company.capa.model.CAPA;
-import com.company.capa.repository.CAPARepository;
 import com.company.capa.service.CAPAService;
-import com.company.capa.service.WorkflowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -16,32 +15,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CAPAController {
     private final CAPAService capaService;
-    private final WorkflowService workflowService;
 
     @PostMapping
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<CAPA> create(@RequestBody @Valid CAPA capa) {
         CAPA created = capaService.create(capa);
-        long piKey = workflowService.startCapaProcess(created);
-        created.setProcessInstanceKey(piKey);
-        return ResponseEntity.ok(capaService.create(created));
+        return ResponseEntity.ok(created);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<List<CAPA>> list() {
         return ResponseEntity.ok(capaService.list());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<CAPA> get(@PathVariable Long id) {
         return ResponseEntity.ok(capaService.get(id));
     }
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<CAPA> updateStatus(@PathVariable Long id, @RequestParam String status) {
         return ResponseEntity.ok(capaService.updateStatus(id, status));
     }
 
     @PatchMapping("/{id}/workflow")
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<CAPA> updateWorkflow(@PathVariable Long id,
                                                @RequestParam(required = false) Boolean necessiteCapa,
                                                @RequestParam(required = false) Boolean planApprouve,

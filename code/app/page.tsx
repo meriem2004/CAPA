@@ -22,14 +22,18 @@ import { DeclarantMockCapaPage } from '@/components/declarant/declarant-mock-cap
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userRole, setUserRole] = useState<'declarant' | 'qualite' | 'direction' | null>(null)
+  const [userData, setUserData] = useState<any>(null)
   
   const [activeRole, setActiveRole] = useState('declarant')
   const [activeView, setActiveView] = useState('dashboard')
 
-  const handleLogin = (role: 'declarant' | 'qualite' | 'direction') => {
+  const handleLogin = (role: 'declarant' | 'qualite' | 'direction', userData?: any) => {
     setIsAuthenticated(true)
     setUserRole(role)
     setActiveRole(role)
+    if (userData) {
+      setUserData(userData)
+    }
   }
 
   // Example usage to ensure services can be called (not rendered)
@@ -39,8 +43,11 @@ export default function Home() {
   const handleLogout = () => {
     setIsAuthenticated(false)
     setUserRole(null)
+    setUserData(null)
     setActiveRole('declarant')
     setActiveView('dashboard')
+    // Note: In a real app, you might want to call a logout API endpoint here
+    // to invalidate the session on the backend
   }
 
   if (!isAuthenticated) {

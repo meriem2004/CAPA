@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import ReactQueryProvider from '@/components/ReactQueryProvider'
+import { Toaster } from '@/components/ui/toaster'
 
 // Configure Geist fonts
 const geistSans = GeistSans
@@ -44,6 +45,7 @@ export default function RootLayout({
          <ReactQueryProvider>
            {children}
          </ReactQueryProvider>
+         <Toaster />
          <Analytics />
       </body>
     </html>

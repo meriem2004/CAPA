@@ -1,8 +1,10 @@
 package com.company.capa.model;
 
+import com.company.capa.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +32,8 @@ public class User {
     private String lastName;
 
     @Column(nullable = false, length = 50)
-    private String role; // OPERATOR | QUALITY | MANAGER | ADMIN
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "is_active")
     private Boolean isActive = true;
