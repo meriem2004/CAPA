@@ -4,17 +4,21 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Mail, Lock, ChevronRight } from 'lucide-react'
+import { Lock, ChevronRight, User } from 'lucide-react'
+import { login } from '@/components/declarant/services/api/auth.service'
+import { mapBackendRoleToFrontend } from '@/lib/auth-utils'
+import { useToast } from '@/hooks/use-toast'
 
 interface LoginPageProps {
-  onLogin: (role: 'declarant' | 'qualite' | 'direction') => void
+  onLogin: (role: 'declarant' | 'qualite' | 'direction', userData?: any) => void
 }
 
 export function LoginPage({ onLogin }: LoginPageProps) {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [demoRole, setDemoRole] = useState<'declarant' | 'qualite' | 'direction' | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const handleDemoLogin = (role: 'declarant' | 'qualite' | 'direction') => {
     setIsLoading(true)
@@ -24,13 +28,37 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     }, 600)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     setIsLoading(true)
-    setTimeout(() => {
-      onLogin('declarant')
+
+    try {
+      const response = await login({ username, password })
+      
+      if (response.message && response.message !== 'Login successful') {
+        throw new Error(response.message)
+      }
+
+      const frontendRole = mapBackendRoleToFrontend(response.role)
+      
+      toast({
+        title: 'Login successful',
+        description: `Welcome, ${response.firstName || response.username}!`,
+      })
+
+      onLogin(frontendRole, response)
+    } catch (err: any) {
+      const errorMessage = err?.response?.data?.message || err?.message || 'Invalid username or password'
+      setError(errorMessage)
+      toast({
+        title: 'Login failed',
+        description: errorMessage,
+        variant: 'destructive',
+      })
+    } finally {
       setIsLoading(false)
-    }, 600)
+    }
   }
 
   return (
@@ -56,21 +84,29 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         {/* Main Card */}
         <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 mb-6 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Input */}
+            {/* Error Message */}
+            {error && (
+              <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-sm text-red-200">
+                {error}
+              </div>
+            )}
+
+            {/* Username Input */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-100">
-                Email Address
+              <Label htmlFor="username" className="text-sm font-medium text-slate-100">
+                Username
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
+                <User className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:bg-white/10 focus:border-blue-500/50"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -90,6 +126,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:bg-white/10 focus:border-blue-500/50"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
